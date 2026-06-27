@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCategory, createQuiz, addQuestion } from '../controllers/admin.controller';
+import { createCategory, createQuiz, addQuestion, createAdmin } from '../controllers/admin.controller';
 import { authMiddleware, roleGuard } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -110,5 +110,35 @@ router.post('/quizzes', createQuiz);
  *         description: Forbidden
  */
 router.post('/quizzes/:quizId/questions', addQuestion);
+
+/**
+ * @openapi
+ * /api/admin/create-admin:
+ *   post:
+ *     summary: Register a new Admin user (Admin only)
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [username, email, password]
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Admin user registered successfully
+ *       403:
+ *         description: Forbidden
+ */
+router.post('/create-admin', createAdmin);
 
 export default router;

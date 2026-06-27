@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, getProfile } from '../controllers/auth.controller';
+import { register, login, getProfile, forgotPassword, resetPassword } from '../controllers/auth.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -16,7 +16,7 @@ const router = Router();
  *         application/json:
  *           schema:
  *             type: object
- *             required: [username, email, password, role]
+ *             required: [username, email, password]
  *             properties:
  *               username:
  *                 type: string
@@ -24,9 +24,6 @@ const router = Router();
  *                 type: string
  *               password:
  *                 type: string
- *               role:
- *                 type: string
- *                 enum: [Admin, Student]
  *     responses:
  *       201:
  *         description: Registered successfully
@@ -76,5 +73,55 @@ router.post('/login', login);
  *         description: Unauthorized
  */
 router.get('/profile', authMiddleware, getProfile);
+
+/**
+ * @openapi
+ * /api/auth/forgot-password:
+ *   post:
+ *     summary: Request a password reset link/token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Reset token generated successfully
+ *       404:
+ *         description: User not found
+ */
+router.post('/forgot-password', forgotPassword);
+
+/**
+ * @openapi
+ * /api/auth/reset-password:
+ *   post:
+ *     summary: Reset password using token
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [token, newPassword]
+ *             properties:
+ *               token:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password successfully updated
+ *       400:
+ *         description: Invalid or expired token
+ */
+router.post('/reset-password', resetPassword);
 
 export default router;

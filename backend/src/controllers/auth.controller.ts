@@ -5,8 +5,8 @@ import * as authService from '../services/auth.service';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { username, email, password, role } = req.body;
-    const result = await authService.registerUser(username, email, password, role);
+    const { username, email, password } = req.body;
+    const result = await authService.registerUser(username, email, password, 'Student');
     sendSuccess(res, 'User registered successfully', result, 201);
   } catch (error) {
     next(error);
@@ -31,4 +31,25 @@ export const getProfile = async (req: AuthRequest, res: Response, next: NextFunc
     next(error);
   }
 };
+
+export const forgotPassword = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email } = req.body;
+    const result = await authService.requestPasswordReset(email);
+    sendSuccess(res, 'Password reset link generated and logged successfully', result, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { token, newPassword } = req.body;
+    const result = await authService.resetUserPassword(token, newPassword);
+    sendSuccess(res, result.message, null, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
