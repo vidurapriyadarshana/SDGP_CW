@@ -6,7 +6,7 @@ import StudentDashboard from '../components/StudentDashboard';
 export default function Dashboard() {
   const { user } = useAuth();
 
-  if (user?.role === 'Admin') {
+  if (user?.role === 'Admin' || user?.role === 'SuperAdmin') {
     return <AdminDashboard />;
   }
 

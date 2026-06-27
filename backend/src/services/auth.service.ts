@@ -58,8 +58,12 @@ export const loginUser = async (email: string, password: string, requiredRole?: 
   }
 
   // Enforce role restriction if requested
-  if (requiredRole && user.role !== requiredRole) {
-    throw new CustomError(`Access denied. Please use the appropriate login portal.`, 403);
+  if (requiredRole) {
+    if (requiredRole === 'Admin' && user.role !== 'Admin' && user.role !== 'SuperAdmin') {
+      throw new CustomError(`Access denied. Please use the appropriate login portal.`, 403);
+    } else if (requiredRole === 'Student' && user.role !== 'Student') {
+      throw new CustomError(`Access denied. Please use the appropriate login portal.`, 403);
+    }
   }
 
   // Ensure user is verified first

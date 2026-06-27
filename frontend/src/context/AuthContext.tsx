@@ -4,7 +4,7 @@ import api from '../utils/api';
 export interface User {
   id: string;
   username: string;
-  role: 'Admin' | 'Student';
+  role: 'Admin' | 'Student' | 'SuperAdmin';
 }
 
 interface AuthContextType {

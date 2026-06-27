@@ -16,9 +16,7 @@ export const startQuizAttempt = async (quizId: string) => {
   // Exclude correctness data to prevent Inspect sniff cheating
   const questions = await Question.find({ quizId }).select('-options.isCorrect');
   return {
-    quizId,
-    title: quiz.title,
-    timeLimit: quiz.timeLimit,
+    quiz,
     questions
   };
 };

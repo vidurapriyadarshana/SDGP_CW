@@ -55,7 +55,7 @@ export default function AdminLogin() {
       const response = await api.post('/auth/verify-login', { email, otp });
       const { token, user } = response.data.data;
 
-      if (user.role !== 'Admin') {
+      if (user.role !== 'Admin' && user.role !== 'SuperAdmin') {
         setOtpError('Access Denied: Only Administrator accounts can sign in here.');
         setOtpLoading(false);
         return;

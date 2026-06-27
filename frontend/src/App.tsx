@@ -42,7 +42,7 @@ const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     );
   }
 
-  if (!user || user.role !== 'Admin') {
+  if (!user || (user.role !== 'Admin' && user.role !== 'SuperAdmin')) {
     return <Navigate to="/dashboard" replace />;
   }
 
