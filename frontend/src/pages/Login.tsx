@@ -28,7 +28,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await api.post('/auth/login', { email, password, role: 'Student' });
       const { requiresOTP } = response.data.data;
       
       if (requiresOTP) {

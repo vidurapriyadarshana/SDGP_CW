@@ -147,7 +147,8 @@ describe('Quiz Web App MVP API Integration Tests', () => {
         .post('/api/auth/login')
         .send({
           email: 'test_student@example.com',
-          password: 'password123'
+          password: 'password123',
+          role: 'Student'
         });
 
       expect(response.status).toBe(200);
@@ -177,7 +178,8 @@ describe('Quiz Web App MVP API Integration Tests', () => {
         .post('/api/auth/login')
         .send({
           email: 'test_admin@example.com',
-          password: 'password123'
+          password: 'password123',
+          role: 'Admin'
         });
 
       expect(response.status).toBe(200);

@@ -49,11 +49,16 @@ export const verifyAccount = async (email: string, otp: string) => {
   return { message: 'Account successfully verified and activated' };
 };
 
-export const loginUser = async (email: string, password: string) => {
+export const loginUser = async (email: string, password: string, requiredRole?: 'Admin' | 'Student') => {
   const user = await User.findOne({ email });
   
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
     throw new CustomError('Invalid credentials', 401);
+  }
+
+  // Enforce role restriction if requested
+  if (requiredRole && user.role !== requiredRole) {
+    throw new CustomError(`Access denied. Please use the appropriate login portal.`, 403);
   }
 
   // Ensure user is verified first

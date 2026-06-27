@@ -25,8 +25,8 @@ export const verifyAccount = async (req: Request, res: Response, next: NextFunct
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { email, password } = req.body;
-    const result = await authService.loginUser(email, password);
+    const { email, password, role } = req.body;
+    const result = await authService.loginUser(email, password, role);
     // Returns { requiresOTP: true, email }
     sendSuccess(res, 'Verification code sent to your email.', result, 200);
   } catch (error) {

@@ -28,7 +28,7 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await api.post('/auth/login', { email, password, role: 'Admin' });
       const { requiresOTP } = response.data.data;
 
       if (requiresOTP) {
