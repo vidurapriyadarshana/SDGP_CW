@@ -107,4 +107,50 @@ export const deleteUser = async (req: AuthRequest, res: Response, next: NextFunc
   }
 };
 
+export const deleteCategory = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const result = await adminService.deleteCategory(req.params.categoryId);
+    sendSuccess(res, result.message, null, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteQuiz = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const result = await adminService.deleteQuiz(req.params.quizId);
+    sendSuccess(res, result.message, null, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteQuestion = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const result = await adminService.deleteQuestion(req.params.questionId);
+    sendSuccess(res, result.message, null, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const editQuestion = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const { questionText, points, options } = req.body;
+    const result = await adminService.editQuestion(req.params.questionId, questionText, points, options);
+    sendSuccess(res, 'Question updated successfully', result, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getQuestionsForQuiz = async (req: AuthRequest, res: Response, next: NextFunction) => {
+  try {
+    const result = await adminService.getQuestionsForQuiz(req.params.quizId);
+    sendSuccess(res, 'Questions retrieved successfully', result, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
 

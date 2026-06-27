@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
-import api from '../utils/api';
+import { getQuizLeaderboard } from '../api/student';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Alert, AlertDescription } from '../components/ui/alert';
@@ -42,7 +42,7 @@ export default function Results() {
     const fetchLeaderboard = async () => {
       setLoadingLeaderboard(true);
       try {
-        const response = await api.get(`/student/quizzes/${quizId}/leaderboard`);
+        const response = await getQuizLeaderboard(quizId!);
         setLeaderboard(response.data.data);
       } catch (err: any) {
         console.error('Error fetching leaderboard:', err);

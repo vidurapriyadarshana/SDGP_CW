@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import api from '../utils/api';
+import { toast } from 'sonner';
+import {
+  getAdminCategories,
+  getAdminQuizzes,
+  getAdminUsers,
+  getAdminQuizQuestions,
+  createCategory,
+  deleteCategory,
+  createQuiz,
+  deleteQuiz,
+  addQuestion,
+  updateQuestion,
+  deleteQuestion,
+  deleteUser,
+  inviteAdmin
+} from '../api/admin';
 import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 import { Alert, AlertDescription } from './ui/alert';
 import { 
   Plus, Trash2, LogOut, BookOpen, Users, Award, 
-  ShieldAlert, ListPlus, ClipboardList, CheckCircle2, RefreshCw 
+  ShieldAlert, ListPlus, ClipboardList, CheckCircle2, RefreshCw, X 
 } from 'lucide-react';
 
 interface Category {
@@ -44,7 +59,7 @@ export default function AdminDashboard() {
     navigate('/admin/login');
     logout();
   };
-  const [activeTab, setActiveTab] = useState<'overview' | 'category' | 'quiz' | 'question' | 'admin' | 'students' | 'admins_list'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'category' | 'quiz' | 'question' | 'students' | 'admins_list'>('overview');
   
   // Loaded Data States
   const [categories, setCategories] = useState<Category[]>([]);
@@ -78,15 +93,24 @@ export default function AdminDashboard() {
   // --- Create Admin Form State ---
   const [adminUser, setAdminUser] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [deleteConfirmationUser, setDeleteConfirmationUser] = useState<{ id: string; username: string } | null>(null);
+  const [deleteConfirmationCategory, setDeleteConfirmationCategory] = useState<{ id: string; name: string } | null>(null);
+  const [deleteConfirmationQuiz, setDeleteConfirmationQuiz] = useState<{ id: string; title: string } | null>(null);
+  const [deleteConfirmationQuestion, setDeleteConfirmationQuestion] = useState<{ id: string; questionText: string } | null>(null);
+
+  // --- Questions List & Editing State ---
+  const [questionsList, setQuestionsList] = useState<any[]>([]);
+  const [editingQuestionId, setEditingQuestionId] = useState<string | null>(null);
 
   // Fetch categories, quizzes, and users for forms
   const fetchData = async () => {
     setLoadingData(true);
     try {
       const [catRes, quizRes, userRes] = await Promise.all([
-        api.get('/admin/categories'),
-        api.get('/admin/quizzes'),
-        api.get('/admin/users')
+        getAdminCategories(),
+        getAdminQuizzes(),
+        getAdminUsers()
       ]);
       setCategories(catRes.data.data);
       setQuizzes(quizRes.data.data);
@@ -98,30 +122,149 @@ export default function AdminDashboard() {
     }
   };
 
+  const fetchQuestions = async (quizId: string) => {
+    if (!quizId) {
+      setQuestionsList([]);
+      return;
+    }
+    try {
+      const res = await getAdminQuizQuestions(quizId);
+      setQuestionsList(res.data.data);
+    } catch (err) {
+      console.error('Error fetching questions:', err);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    fetchQuestions(selectedQuizId);
+    setEditingQuestionId(null);
+    setQuestionText('');
+    setQuestionPoints(5);
+    setOptions([
+      { optionText: '', isCorrect: false },
+      { optionText: '', isCorrect: false }
+    ]);
+  }, [selectedQuizId]);
+
   const clearFeedback = () => setFeedback(null);
 
-  const handleDeleteUser = async (userId: string, username: string) => {
-    if (!window.confirm(`Are you sure you want to permanently delete user "${username}"?`)) {
-      return;
-    }
+  const handleDeleteUser = (userId: string, username: string) => {
+    setDeleteConfirmationUser({ id: userId, username });
+  };
+
+  const confirmDeleteUser = async () => {
+    if (!deleteConfirmationUser) return;
     setLoadingData(true);
     clearFeedback();
     try {
-      await api.delete(`/admin/users/${userId}`);
-      setFeedback({ type: 'success', message: `User "${username}" was deleted successfully.` });
+      await deleteUser(deleteConfirmationUser.id);
+      const msg = `User "${deleteConfirmationUser.username}" was deleted successfully.`;
+      setFeedback({ type: 'success', message: msg });
+      toast.success(msg);
       fetchData();
     } catch (err: any) {
-      setFeedback({
-        type: 'error',
-        message: err.response?.data?.message || err.response?.data?.error || 'Failed to delete user.'
-      });
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to delete user.';
+      setFeedback({ type: 'error', message: msg });
+      toast.error(msg);
     } finally {
       setLoadingData(false);
+      setDeleteConfirmationUser(null);
     }
+  };
+
+  const handleDeleteCategory = (categoryId: string, name: string) => {
+    setDeleteConfirmationCategory({ id: categoryId, name });
+  };
+
+  const confirmDeleteCategory = async () => {
+    if (!deleteConfirmationCategory) return;
+    setLoadingData(true);
+    clearFeedback();
+    try {
+      await deleteCategory(deleteConfirmationCategory.id);
+      const msg = `Category "${deleteConfirmationCategory.name}" was deleted successfully.`;
+      setFeedback({ type: 'success', message: msg });
+      toast.success(msg);
+      fetchData();
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to delete category.';
+      setFeedback({ type: 'error', message: msg });
+      toast.error(msg);
+    } finally {
+      setLoadingData(false);
+      setDeleteConfirmationCategory(null);
+    }
+  };
+
+  const handleDeleteQuiz = (quizId: string, title: string) => {
+    setDeleteConfirmationQuiz({ id: quizId, title });
+  };
+
+  const confirmDeleteQuiz = async () => {
+    if (!deleteConfirmationQuiz) return;
+    setLoadingData(true);
+    clearFeedback();
+    try {
+      await deleteQuiz(deleteConfirmationQuiz.id);
+      const msg = `Quiz "${deleteConfirmationQuiz.title}" was deleted successfully.`;
+      setFeedback({ type: 'success', message: msg });
+      toast.success(msg);
+      fetchData();
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to delete quiz.';
+      setFeedback({ type: 'error', message: msg });
+      toast.error(msg);
+    } finally {
+      setLoadingData(false);
+      setDeleteConfirmationQuiz(null);
+    }
+  };
+
+  const handleDeleteQuestion = (questionId: string, questionText: string) => {
+    setDeleteConfirmationQuestion({ id: questionId, questionText });
+  };
+
+  const confirmDeleteQuestion = async () => {
+    if (!deleteConfirmationQuestion) return;
+    setLoadingData(true);
+    clearFeedback();
+    try {
+      await deleteQuestion(deleteConfirmationQuestion.id);
+      const msg = 'Question was deleted successfully.';
+      setFeedback({ type: 'success', message: msg });
+      toast.success(msg);
+      fetchQuestions(selectedQuizId);
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to delete question.';
+      setFeedback({ type: 'error', message: msg });
+      toast.error(msg);
+    } finally {
+      setLoadingData(false);
+      setDeleteConfirmationQuestion(null);
+    }
+  };
+
+  const handleStartEditQuestion = (q: any) => {
+    setEditingQuestionId(q._id);
+    setQuestionText(q.questionText);
+    setQuestionPoints(q.points);
+    setOptions(q.options.map((o: any) => ({ optionText: o.optionText, isCorrect: o.isCorrect })));
+    clearFeedback();
+  };
+
+  const handleCancelEdit = () => {
+    setEditingQuestionId(null);
+    setQuestionText('');
+    setQuestionPoints(5);
+    setOptions([
+      { optionText: '', isCorrect: false },
+      { optionText: '', isCorrect: false }
+    ]);
+    clearFeedback();
   };
 
   // Submit New Category
@@ -131,16 +274,17 @@ export default function AdminDashboard() {
     clearFeedback();
 
     try {
-      await api.post('/admin/categories', { name: categoryName, description: categoryDesc });
-      setFeedback({ type: 'success', message: `Category "${categoryName}" created successfully!` });
+      await createCategory({ name: categoryName, description: categoryDesc });
+      const msg = `Category "${categoryName}" created successfully!`;
+      setFeedback({ type: 'success', message: msg });
+      toast.success(msg);
       setCategoryName('');
       setCategoryDesc('');
       fetchData(); // Refresh list
     } catch (err: any) {
-      setFeedback({
-        type: 'error',
-        message: err.response?.data?.message || err.response?.data?.error || 'Failed to create category.'
-      });
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to create category.';
+      setFeedback({ type: 'error', message: msg });
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }
@@ -150,30 +294,33 @@ export default function AdminDashboard() {
   const handleQuizSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!quizCategory) {
-      setFeedback({ type: 'error', message: 'Please select a category.' });
+      const selectMsg = 'Please select a category.';
+      setFeedback({ type: 'error', message: selectMsg });
+      toast.error(selectMsg);
       return;
     }
     setSubmitting(true);
     clearFeedback();
 
     try {
-      await api.post('/admin/quizzes', {
+      await createQuiz({
         categoryId: quizCategory,
         title: quizTitle,
         description: quizDesc,
         timeLimit: Number(quizTime)
       });
-      setFeedback({ type: 'success', message: `Quiz "${quizTitle}" created successfully!` });
+      const msg = `Quiz "${quizTitle}" created successfully!`;
+      setFeedback({ type: 'success', message: msg });
+      toast.success(msg);
       setQuizTitle('');
       setQuizDesc('');
       setQuizTime(600);
       setQuizCategory('');
       fetchData(); // Refresh list
     } catch (err: any) {
-      setFeedback({
-        type: 'error',
-        message: err.response?.data?.message || err.response?.data?.error || 'Failed to create quiz.'
-      });
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to create quiz.';
+      setFeedback({ type: 'error', message: msg });
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }
@@ -210,19 +357,25 @@ export default function AdminDashboard() {
   const handleQuestionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedQuizId) {
-      setFeedback({ type: 'error', message: 'Please select a quiz.' });
+      const quizMsg = 'Please select a quiz.';
+      setFeedback({ type: 'error', message: quizMsg });
+      toast.error(quizMsg);
       return;
     }
 
     const correctCount = options.filter(o => o.isCorrect).length;
     if (correctCount !== 1) {
-      setFeedback({ type: 'error', message: 'Please select exactly one correct option.' });
+      const correctMsg = 'Please select exactly one correct option.';
+      setFeedback({ type: 'error', message: correctMsg });
+      toast.error(correctMsg);
       return;
     }
 
     const hasEmptyOption = options.some(o => !o.optionText.trim());
     if (hasEmptyOption) {
-      setFeedback({ type: 'error', message: 'All option texts must be filled.' });
+      const emptyMsg = 'All option texts must be filled.';
+      setFeedback({ type: 'error', message: emptyMsg });
+      toast.error(emptyMsg);
       return;
     }
 
@@ -230,24 +383,38 @@ export default function AdminDashboard() {
     clearFeedback();
 
     try {
-      await api.post(`/admin/quizzes/${selectedQuizId}/questions`, {
-        questionText,
-        points: Number(questionPoints),
-        options
-      });
+      if (editingQuestionId) {
+        await updateQuestion(editingQuestionId, {
+          questionText,
+          points: Number(questionPoints),
+          options
+        });
+        const msg = 'Question updated successfully!';
+        setFeedback({ type: 'success', message: msg });
+        toast.success(msg);
+        setEditingQuestionId(null);
+      } else {
+        await addQuestion(selectedQuizId, {
+          questionText,
+          points: Number(questionPoints),
+          options
+        });
+        const msg = 'Question successfully added to quiz!';
+        setFeedback({ type: 'success', message: msg });
+        toast.success(msg);
+      }
 
-      setFeedback({ type: 'success', message: 'Question successfully added to quiz!' });
       setQuestionText('');
       setQuestionPoints(5);
       setOptions([
         { optionText: '', isCorrect: false },
         { optionText: '', isCorrect: false }
       ]);
+      fetchQuestions(selectedQuizId);
     } catch (err: any) {
-      setFeedback({
-        type: 'error',
-        message: err.response?.data?.message || err.response?.data?.error || 'Failed to add question.'
-      });
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to save question.';
+      setFeedback({ type: 'error', message: msg });
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }
@@ -260,18 +427,21 @@ export default function AdminDashboard() {
     clearFeedback();
 
     try {
-      await api.post('/admin/create-admin', {
+      await inviteAdmin({
         username: adminUser,
         email: adminEmail
       });
-      setFeedback({ type: 'success', message: `Admin invitation successfully sent to "${adminEmail}"!` });
+      const msg = `Admin invitation successfully sent to "${adminEmail}"!`;
+      setFeedback({ type: 'success', message: msg });
+      toast.success(msg);
       setAdminUser('');
       setAdminEmail('');
+      setIsRegisterModalOpen(false);
+      fetchData();
     } catch (err: any) {
-      setFeedback({
-        type: 'error',
-        message: err.response?.data?.message || err.response?.data?.error || 'Failed to send admin invitation.'
-      });
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Failed to send admin invitation.';
+      setFeedback({ type: 'error', message: msg });
+      toast.error(msg);
     } finally {
       setSubmitting(false);
     }
@@ -365,17 +535,6 @@ export default function AdminDashboard() {
             <span>Manage Questions</span>
           </button>
 
-          <button
-            onClick={() => { setActiveTab('admin'); clearFeedback(); }}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-              activeTab === 'admin' 
-                ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
-                : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
-            }`}
-          >
-            <Users className="h-4.5 w-4.5" />
-            <span>Register Admin</span>
-          </button>
 
           <button
             onClick={() => { setActiveTab('students'); clearFeedback(); }}
@@ -465,6 +624,7 @@ export default function AdminDashboard() {
                           <th className="p-4 font-semibold">Category</th>
                           <th className="p-4 font-semibold">Time Limit</th>
                           <th className="p-4 font-semibold">Quiz ID</th>
+                          <th className="p-4 font-semibold text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-900">
@@ -474,6 +634,15 @@ export default function AdminDashboard() {
                             <td className="p-4">{quiz.categoryId?.name || 'Unassigned'}</td>
                             <td className="p-4">{Math.floor(quiz.timeLimit / 60)} minutes</td>
                             <td className="p-4 font-mono text-xs text-slate-500">{quiz._id}</td>
+                            <td className="p-4 text-right">
+                              <button
+                                onClick={() => handleDeleteQuiz(quiz._id, quiz.title)}
+                                className="p-1.5 text-red-400 hover:text-red-500 hover:bg-red-500/10 rounded transition-all"
+                                title="Delete Quiz"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
                           </tr>
                         ))}
                       </tbody>
@@ -523,6 +692,45 @@ export default function AdminDashboard() {
                   Create Category
                 </Button>
               </form>
+
+              {/* Existing Categories List */}
+              <div className="mt-12">
+                <h3 className="text-base font-bold text-white mb-4">Existing Categories</h3>
+                <div className="border border-slate-900 rounded-xl overflow-hidden bg-slate-900/20 backdrop-blur-md">
+                  {categories.length === 0 ? (
+                    <div className="p-8 text-center text-slate-500 text-sm">
+                      No categories configured yet.
+                    </div>
+                  ) : (
+                    <table className="w-full text-left border-collapse text-sm">
+                      <thead>
+                        <tr className="border-b border-slate-900 bg-slate-950/40 text-slate-400">
+                          <th className="p-4 font-semibold">Name</th>
+                          <th className="p-4 font-semibold">Description</th>
+                          <th className="p-4 font-semibold text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-900">
+                        {categories.map((cat) => (
+                          <tr key={cat._id} className="hover:bg-slate-900/30 transition-all text-slate-300">
+                            <td className="p-4 font-semibold text-white">{cat.name}</td>
+                            <td className="p-4 text-slate-400">{cat.description}</td>
+                            <td className="p-4 text-right">
+                              <button
+                                onClick={() => handleDeleteCategory(cat._id, cat.name)}
+                                className="p-1.5 text-red-400 hover:text-red-500 hover:bg-red-500/10 rounded transition-all"
+                                title="Delete Category"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              </div>
             </div>
           )}
 
@@ -705,61 +913,88 @@ export default function AdminDashboard() {
                     </div>
                   </div>
 
-                  <Button
-                    type="submit"
-                    loading={submitting}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white h-11 px-6 rounded-lg w-full sm:w-auto"
-                  >
-                    Add Question to Quiz
-                  </Button>
+                  <div className="flex gap-3">
+                    <Button
+                      type="submit"
+                      loading={submitting}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white h-11 px-6 rounded-lg w-full sm:w-auto font-semibold"
+                    >
+                      {editingQuestionId ? 'Update Question' : 'Add Question to Quiz'}
+                    </Button>
+                    {editingQuestionId && (
+                      <Button
+                        type="button"
+                        onClick={handleCancelEdit}
+                        variant="ghost"
+                        className="text-slate-400 hover:text-white h-11 px-6 rounded-lg"
+                      >
+                        Cancel Edit
+                      </Button>
+                    )}
+                  </div>
                 </form>
+              )}
+
+              {/* Questions List */}
+              {selectedQuizId && (
+                <div className="mt-12 space-y-4">
+                  <h3 className="text-base font-bold text-white">Current Quiz Questions ({questionsList.length})</h3>
+                  <div className="space-y-4">
+                    {questionsList.length === 0 ? (
+                      <p className="text-sm text-slate-500 italic">No questions added to this quiz yet.</p>
+                    ) : (
+                      questionsList.map((q, idx) => (
+                        <Card key={q._id} className="border-slate-900 bg-slate-900/10 p-4 space-y-3 relative overflow-hidden">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="space-y-1">
+                              <h4 className="text-sm font-bold text-white">
+                                Q{idx + 1}. {q.questionText}
+                              </h4>
+                              <span className="inline-block text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded font-bold">
+                                {q.points} points
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => handleStartEditQuestion(q)}
+                                className="p-1 rounded text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/10 text-xs font-semibold px-2 py-1 transition-all"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteQuestion(q._id, q.questionText)}
+                                className="p-1 rounded text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </button>
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                            {q.options.map((o: any, oIdx: number) => (
+                              <div
+                                key={oIdx}
+                                className={`p-2 rounded text-xs border ${
+                                  o.isCorrect
+                                    ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-semibold'
+                                    : 'bg-slate-950/40 border-slate-900/50 text-slate-400'
+                                }`}
+                              >
+                                {o.optionText} {o.isCorrect && '✓'}
+                              </div>
+                            ))}
+                          </div>
+                        </Card>
+                      ))
+                    )}
+                  </div>
+                </div>
               )}
             </div>
           )}
 
-          {/* REGISTER ADMIN PANEL */}
-          {activeTab === 'admin' && (
-            <div className="max-w-2xl animate-fadeIn">
-              <h2 className="text-xl font-bold text-white mb-2">Register Administrative User</h2>
-              <p className="text-sm text-slate-400 mb-6">Create secondary admin accounts with full permissions to customize subjects, quizzes and questions.</p>
 
-              <form onSubmit={handleAdminSubmit} className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-300">Admin Username</label>
-                  <input
-                    type="text"
-                    required
-                    value={adminUser}
-                    onChange={(e) => setAdminUser(e.target.value)}
-                    placeholder="admin_doe"
-                    className="w-full h-11 px-3 rounded-lg border border-slate-800 bg-slate-950/50 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-slate-300">Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    value={adminEmail}
-                    onChange={(e) => setAdminEmail(e.target.value)}
-                    placeholder="admin.doe@quizapp.com"
-                    className="w-full h-11 px-3 rounded-lg border border-slate-800 bg-slate-950/50 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
-                  />
-                </div>
-
-
-
-                <Button
-                  type="submit"
-                  loading={submitting}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white h-11 px-6 rounded-lg w-full sm:w-auto"
-                >
-                  Register Admin Account
-                </Button>
-              </form>
-            </div>
-          )}
 
           {/* MANAGE STUDENTS PANEL */}
           {activeTab === 'students' && (
@@ -817,10 +1052,21 @@ export default function AdminDashboard() {
           {/* MANAGE ADMINS PANEL */}
           {activeTab === 'admins_list' && (
             <div className="space-y-6 animate-fadeIn">
-              <h2 className="text-xl font-bold text-white mb-2">Manage Administrators</h2>
-              <p className="text-sm text-slate-400 mb-6">List and delete administrative accounts.</p>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-1">Manage Administrators</h2>
+                  <p className="text-sm text-slate-400">List and delete administrative accounts.</p>
+                </div>
+                <Button 
+                  onClick={() => setIsRegisterModalOpen(true)} 
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2 self-start"
+                >
+                  <Plus className="h-4 w-4" />
+                  Register New Admin
+                </Button>
+              </div>
 
-              <div className="border border-slate-900 rounded-xl overflow-hidden bg-slate-900/20 backdrop-blur-md">
+              <div className="border border-slate-900 rounded-xl overflow-hidden bg-slate-900/20 backdrop-blur-md mt-6">
                 {users.filter(u => u.role === 'Admin').length === 0 ? (
                   <div className="p-8 text-center text-slate-500 text-sm">
                     No administrators found.
@@ -869,6 +1115,259 @@ export default function AdminDashboard() {
           )}
         </main>
       </div>
+
+      {/* REGISTER ADMIN MODAL */}
+      {isRegisterModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 relative shadow-2xl space-y-6">
+            <button 
+              onClick={() => {
+                setIsRegisterModalOpen(false);
+                setAdminUser('');
+                setAdminEmail('');
+              }}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+              title="Close modal"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div>
+              <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                <ShieldAlert className="h-5.5 w-5.5 text-indigo-400" />
+                Register Administrative User
+              </h3>
+              <p className="text-sm text-slate-400">
+                Create secondary admin accounts with full permissions to customize subjects, quizzes, and questions.
+              </p>
+            </div>
+
+            <form onSubmit={handleAdminSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-300">Admin Username</label>
+                <input
+                  type="text"
+                  required
+                  value={adminUser}
+                  onChange={(e) => setAdminUser(e.target.value)}
+                  placeholder="admin_doe"
+                  className="w-full h-11 px-3 rounded-lg border border-slate-800 bg-slate-950/50 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-300">Email Address</label>
+                <input
+                  type="email"
+                  required
+                  value={adminEmail}
+                  onChange={(e) => setAdminEmail(e.target.value)}
+                  placeholder="admin.doe@quizapp.com"
+                  className="w-full h-11 px-3 rounded-lg border border-slate-800 bg-slate-950/50 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setIsRegisterModalOpen(false);
+                    setAdminUser('');
+                    setAdminEmail('');
+                  }}
+                  variant="ghost"
+                  className="text-slate-400 hover:text-white"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  loading={submitting}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 rounded-lg font-semibold"
+                >
+                  Register Admin Account
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION MODAL */}
+      {deleteConfirmationUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-6">
+            <button 
+              onClick={() => setDeleteConfirmationUser(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+              title="Cancel"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center">
+                <Trash2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Delete User Account</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Are you sure you want to permanently delete user <span className="font-semibold text-white">"{deleteConfirmationUser.username}"</span>? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex gap-3 justify-center pt-2">
+              <Button
+                type="button"
+                onClick={() => setDeleteConfirmationUser(null)}
+                variant="ghost"
+                className="text-slate-400 hover:text-white px-5 h-10 text-sm"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={confirmDeleteUser}
+                loading={loadingData}
+                className="bg-red-600 hover:bg-red-700 text-white px-5 h-10 text-sm font-semibold border border-red-500/30 shadow-lg shadow-red-600/10"
+              >
+                Confirm Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CATEGORY CONFIRMATION MODAL */}
+      {deleteConfirmationCategory && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-6">
+            <button 
+              onClick={() => setDeleteConfirmationCategory(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+              title="Cancel"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center">
+                <Trash2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Delete Category</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Are you sure you want to permanently delete category <span className="font-semibold text-white">"{deleteConfirmationCategory.name}"</span>? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex gap-3 justify-center pt-2">
+              <Button
+                type="button"
+                onClick={() => setDeleteConfirmationCategory(null)}
+                variant="ghost"
+                className="text-slate-400 hover:text-white px-5 h-10 text-sm"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={confirmDeleteCategory}
+                loading={loadingData}
+                className="bg-red-600 hover:bg-red-700 text-white px-5 h-10 text-sm font-semibold border border-red-500/30 shadow-lg shadow-red-600/10"
+              >
+                Confirm Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE QUIZ CONFIRMATION MODAL */}
+      {deleteConfirmationQuiz && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-6">
+            <button 
+              onClick={() => setDeleteConfirmationQuiz(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+              title="Cancel"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center">
+                <Trash2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Delete Quiz</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Are you sure you want to permanently delete quiz <span className="font-semibold text-white">"{deleteConfirmationQuiz.title}"</span>? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex gap-3 justify-center pt-2">
+              <Button
+                type="button"
+                onClick={() => setDeleteConfirmationQuiz(null)}
+                variant="ghost"
+                className="text-slate-400 hover:text-white px-5 h-10 text-sm"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={confirmDeleteQuiz}
+                loading={loadingData}
+                className="bg-red-600 hover:bg-red-700 text-white px-5 h-10 text-sm font-semibold border border-red-500/30 shadow-lg shadow-red-600/10"
+              >
+                Confirm Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE QUESTION CONFIRMATION MODAL */}
+      {deleteConfirmationQuestion && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 relative shadow-2xl space-y-6">
+            <button 
+              onClick={() => setDeleteConfirmationQuestion(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+              title="Cancel"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex flex-col items-center text-center space-y-3">
+              <div className="h-12 w-12 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 flex items-center justify-center">
+                <Trash2 className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-white">Delete Question</h3>
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Are you sure you want to permanently delete this question <span className="font-semibold text-white">"{deleteConfirmationQuestion.questionText}"</span>? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="flex gap-3 justify-center pt-2">
+              <Button
+                type="button"
+                onClick={() => setDeleteConfirmationQuestion(null)}
+                variant="ghost"
+                className="text-slate-400 hover:text-white px-5 h-10 text-sm"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={confirmDeleteQuestion}
+                loading={loadingData}
+                className="bg-red-600 hover:bg-red-700 text-white px-5 h-10 text-sm font-semibold border border-red-500/30 shadow-lg shadow-red-600/10"
+              >
+                Confirm Delete
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

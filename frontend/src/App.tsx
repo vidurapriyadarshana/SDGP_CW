@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { Toaster } from './components/ui/sonner';
 import Login from './pages/Login';
 import AdminLogin from './pages/AdminLogin';
 import Register from './pages/Register';
@@ -92,6 +93,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
+      <Toaster richColors position="top-right" theme="dark" />
     </AuthProvider>
   );
 }

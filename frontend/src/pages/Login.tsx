@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import api from '../utils/api';
+import { login as apiLogin, verifyLogin } from '../api/auth';
+import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Alert, AlertDescription } from '../components/ui/alert';
@@ -28,19 +29,18 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/login', { email, password, role: 'Student' });
+      const response = await apiLogin({ email, password, role: 'Student' });
       const { requiresOTP } = response.data.data;
       
       if (requiresOTP) {
         setShowOtp(true);
+        toast.success('Verification OTP code sent to your email!');
       }
     } catch (err: any) {
       console.error(err);
-      setError(
-        err.response?.data?.message || 
-        err.response?.data?.error || 
-        'Invalid email or password. Please try again.'
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Invalid email or password. Please try again.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -52,17 +52,16 @@ export default function Login() {
     setOtpLoading(true);
 
     try {
-      const response = await api.post('/auth/verify-login', { email, otp });
+      const response = await verifyLogin({ email, otp });
       const { token, user } = response.data.data;
       login(token, user);
+      toast.success('Successfully authenticated!');
       navigate('/dashboard');
     } catch (err: any) {
       console.error(err);
-      setOtpError(
-        err.response?.data?.message || 
-        err.response?.data?.error || 
-        'Verification failed. Invalid or expired OTP code.'
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Verification failed. Invalid or expired OTP code.';
+      setOtpError(msg);
+      toast.error(msg);
     } finally {
       setOtpLoading(false);
     }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../utils/api';
+import { forgotPassword } from '../api/auth';
+import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Alert, AlertDescription } from '../components/ui/alert';
@@ -18,15 +19,14 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      await api.post('/auth/forgot-password', { email });
+      await forgotPassword({ email });
       setSuccess(true);
+      toast.success('Password reset link sent successfully!');
     } catch (err: any) {
       console.error(err);
-      setError(
-        err.response?.data?.message || 
-        err.response?.data?.error || 
-        'Could not request password reset. Make sure the email is registered.'
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Could not request password reset. Make sure the email is registered.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

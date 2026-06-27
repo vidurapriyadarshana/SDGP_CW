@@ -83,3 +83,68 @@ export const deleteUser = async (userId: string) => {
   await User.findByIdAndDelete(userId);
   return { message: 'User deleted successfully' };
 };
+
+export const deleteCategory = async (categoryId: string) => {
+  const quizExists = await Quiz.exists({ categoryId });
+  if (quizExists) {
+    throw new CustomError('Cannot delete category because it has associated quizzes', 400);
+  }
+  const result = await Category.findByIdAndDelete(categoryId);
+  if (!result) {
+    throw new CustomError('Category not found', 404);
+  }
+  return { message: 'Category deleted successfully' };
+};
+
+export const deleteQuiz = async (quizId: string) => {
+  const questionExists = await Question.exists({ quizId });
+  if (questionExists) {
+    throw new CustomError('Cannot delete quiz because it has associated questions', 400);
+  }
+  const result = await Quiz.findByIdAndDelete(quizId);
+  if (!result) {
+    throw new CustomError('Quiz not found', 404);
+  }
+  return { message: 'Quiz deleted successfully' };
+};
+
+export const deleteQuestion = async (questionId: string) => {
+  const result = await Question.findByIdAndDelete(questionId);
+  if (!result) {
+    throw new CustomError('Question not found', 404);
+  }
+  return { message: 'Question deleted successfully' };
+};
+
+export const editQuestion = async (
+  questionId: string, 
+  questionText: string, 
+  points: number, 
+  options: { optionText: string; isCorrect: boolean }[]
+) => {
+  const question = await Question.findById(questionId);
+  if (!question) {
+    throw new CustomError('Question not found', 404);
+  }
+
+  const correctCount = options.filter(o => o.isCorrect === true).length;
+  if (correctCount !== 1) {
+    throw new CustomError('Exactly one option must be marked correct', 400);
+  }
+
+  const hasEmpty = options.some(o => !o.optionText.trim());
+  if (hasEmpty) {
+    throw new CustomError('All option texts must be filled', 400);
+  }
+
+  question.questionText = questionText;
+  question.points = points;
+  question.options = options;
+  await question.save();
+
+  return question;
+};
+
+export const getQuestionsForQuiz = async (quizId: string) => {
+  return await Question.find({ quizId });
+};

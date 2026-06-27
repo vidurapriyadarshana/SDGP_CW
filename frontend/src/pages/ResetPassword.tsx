@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import api from '../utils/api';
+import { resetPassword } from '../api/auth';
+import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
@@ -47,18 +48,17 @@ export default function ResetPassword() {
     setLoading(true);
 
     try {
-      await api.post('/auth/reset-password', { token, newPassword });
+      await resetPassword({ token, newPassword });
       setSuccess(true);
+      toast.success('Password reset successfully!');
       setTimeout(() => {
         navigate('/login');
       }, 1500);
     } catch (err: any) {
       console.error(err);
-      setError(
-        err.response?.data?.message || 
-        err.response?.data?.error || 
-        'Reset failed. The token may be invalid or expired.'
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Reset failed. The token may be invalid or expired.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }

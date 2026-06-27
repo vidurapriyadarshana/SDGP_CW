@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCategory, createQuiz, addQuestion, createAdmin, getCategories, getQuizzes, getUsers, deleteUser } from '../controllers/admin.controller';
+import { createCategory, createQuiz, addQuestion, createAdmin, getCategories, getQuizzes, getUsers, deleteUser, deleteCategory, deleteQuiz, deleteQuestion, editQuestion, getQuestionsForQuiz } from '../controllers/admin.controller';
 import { authMiddleware, roleGuard } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -145,5 +145,11 @@ router.post('/create-admin', createAdmin);
 
 router.get('/users', getUsers);
 router.delete('/users/:userId', deleteUser);
+
+router.delete('/categories/:categoryId', deleteCategory);
+router.delete('/quizzes/:quizId', deleteQuiz);
+router.get('/quizzes/:quizId/questions', getQuestionsForQuiz);
+router.delete('/questions/:questionId', deleteQuestion);
+router.put('/questions/:questionId', editQuestion);
 
 export default router;

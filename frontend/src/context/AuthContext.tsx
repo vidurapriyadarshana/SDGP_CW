@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../utils/api';
+import { getProfile } from '../api/auth';
 
 export interface User {
   id: string;
@@ -33,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(JSON.parse(savedUser));
           
           // Verify token validity by calling profile endpoint
-          const response = await api.get('/auth/profile');
+          const response = await getProfile();
           const freshUser = {
             id: response.data.data._id,
             username: response.data.data.username,

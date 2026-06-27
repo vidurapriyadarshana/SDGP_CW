@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import api from '../utils/api';
+import { completeRegistration } from '../api/auth';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
@@ -49,7 +49,7 @@ export default function CompleteRegistration() {
     setLoading(true);
 
     try {
-      await api.post('/auth/complete-registration', { token, password });
+      await completeRegistration({ token, password });
       setSuccess(true);
       setTimeout(() => {
         navigate('/admin/login');

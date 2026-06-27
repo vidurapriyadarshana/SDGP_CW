@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import api from '../utils/api';
+import { getQuizzes, getAttemptHistory } from '../api/student';
 import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 import { 
@@ -43,8 +43,8 @@ export default function StudentDashboard() {
     setLoading(true);
     try {
       const [quizRes, attemptRes] = await Promise.all([
-        api.get('/student/quizzes'),
-        api.get('/student/attempts/history')
+        getQuizzes(),
+        getAttemptHistory()
       ]);
       setQuizzes(quizRes.data.data);
       setAttempts(attemptRes.data.data);

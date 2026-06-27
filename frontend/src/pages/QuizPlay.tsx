@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api from '../utils/api';
+import { getQuizPlay, submitQuiz } from '../api/student';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Alert, AlertDescription } from '../components/ui/alert';
@@ -70,7 +70,7 @@ export default function QuizPlay() {
     const fetchQuizPlay = async () => {
       setLoading(true);
       try {
-        const response = await api.get(`/student/quizzes/${quizId}/play`);
+        const response = await getQuizPlay(quizId!);
         const { quiz, questions } = response.data.data;
         setQuiz(quiz);
         setQuestions(questions);
@@ -144,7 +144,7 @@ export default function QuizPlay() {
 
     setSubmitting(true);
     try {
-      const response = await api.post(`/student/quizzes/${quizId}/submit`, {
+      const response = await submitQuiz(quizId!, {
         startedAt: startedAtRef.current,
         answers: answersPayload
       });
@@ -170,7 +170,7 @@ export default function QuizPlay() {
         selectedOptionId: selectedAnswers[q._id] || ''
       }));
 
-      const response = await api.post(`/student/quizzes/${quizId}/submit`, {
+      const response = await submitQuiz(quizId!, {
         startedAt: startedAtRef.current,
         answers: answersPayload
       });

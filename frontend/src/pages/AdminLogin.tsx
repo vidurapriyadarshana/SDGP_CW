@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import api from '../utils/api';
+import { login as apiLogin, verifyLogin } from '../api/auth';
+import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Alert, AlertDescription } from '../components/ui/alert';
@@ -28,19 +29,18 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/login', { email, password, role: 'Admin' });
+      const response = await apiLogin({ email, password, role: 'Admin' });
       const { requiresOTP } = response.data.data;
 
       if (requiresOTP) {
         setShowOtp(true);
+        toast.success('Verification OTP code sent to your email!');
       }
     } catch (err: any) {
       console.error(err);
-      setError(
-        err.response?.data?.message || 
-        err.response?.data?.error || 
-        'Invalid email or password. Please try again.'
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Invalid email or password. Please try again.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -52,24 +52,25 @@ export default function AdminLogin() {
     setOtpLoading(true);
 
     try {
-      const response = await api.post('/auth/verify-login', { email, otp });
+      const response = await verifyLogin({ email, otp });
       const { token, user } = response.data.data;
 
       if (user.role !== 'Admin' && user.role !== 'SuperAdmin') {
-        setOtpError('Access Denied: Only Administrator accounts can sign in here.');
+        const denyMsg = 'Access Denied: Only Administrator accounts can sign in here.';
+        setOtpError(denyMsg);
+        toast.error(denyMsg);
         setOtpLoading(false);
         return;
       }
 
       login(token, user);
+      toast.success('Admin authentication successful! Access granted.');
       navigate('/dashboard');
     } catch (err: any) {
       console.error(err);
-      setOtpError(
-        err.response?.data?.message || 
-        err.response?.data?.error || 
-        'Verification failed. Invalid or expired OTP code.'
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Verification failed. Invalid or expired OTP code.';
+      setOtpError(msg);
+      toast.error(msg);
     } finally {
       setOtpLoading(false);
     }

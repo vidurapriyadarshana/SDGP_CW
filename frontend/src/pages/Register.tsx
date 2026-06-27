@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api from '../utils/api';
+import { register, verifyAccount } from '../api/auth';
+import { toast } from 'sonner';
 import { Button } from '../components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui/card';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
@@ -41,15 +42,14 @@ export default function Register() {
     setLoading(true);
 
     try {
-      await api.post('/auth/register', { username, email, password });
+      await register({ username, email, password });
       setShowOtp(true);
+      toast.success('Registration code sent to your email!');
     } catch (err: any) {
       console.error(err);
-      setError(
-        err.response?.data?.message || 
-        err.response?.data?.error || 
-        'Registration failed. Username or email may already be taken.'
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Registration failed. Username or email may already be taken.';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -61,18 +61,17 @@ export default function Register() {
     setOtpLoading(true);
 
     try {
-      await api.post('/auth/verify-account', { email, otp });
+      await verifyAccount({ email, otp });
       setSuccess(true);
+      toast.success('Account activated successfully!');
       setTimeout(() => {
         navigate('/login');
       }, 1500);
     } catch (err: any) {
       console.error(err);
-      setOtpError(
-        err.response?.data?.message || 
-        err.response?.data?.error || 
-        'Verification failed. Invalid or expired OTP code.'
-      );
+      const msg = err.response?.data?.message || err.response?.data?.error || 'Verification failed. Invalid or expired OTP code.';
+      setOtpError(msg);
+      toast.error(msg);
     } finally {
       setOtpLoading(false);
     }
