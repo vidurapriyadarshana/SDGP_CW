@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, getProfile, forgotPassword, resetPassword } from '../controllers/auth.controller';
+import { register, login, getProfile, forgotPassword, resetPassword, verifyAccount, verifyLogin } from '../controllers/auth.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -123,5 +123,57 @@ router.post('/forgot-password', forgotPassword);
  *         description: Invalid or expired token
  */
 router.post('/reset-password', resetPassword);
+
+/**
+ * @openapi
+ * /api/auth/verify-account:
+ *   post:
+ *     summary: Verify registration account OTP
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, otp]
+ *             properties:
+ *               email:
+ *                 type: string
+ *               otp:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Account successfully verified
+ *       400:
+ *         description: Invalid or expired OTP code
+ */
+router.post('/verify-account', verifyAccount);
+
+/**
+ * @openapi
+ * /api/auth/verify-login:
+ *   post:
+ *     summary: Verify login 2FA OTP code
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email, otp]
+ *             properties:
+ *               email:
+ *                 type: string
+ *               otp:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful, returns JWT
+ *       400:
+ *         description: Invalid or expired OTP code
+ */
+router.post('/verify-login', verifyLogin);
 
 export default router;

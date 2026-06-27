@@ -11,11 +11,32 @@ import { errorHandler } from './middleware/error.middleware';
 
 dotenv.config();
 
+// Validate critical environment variables before startup
+const validateEnv = (): void => {
+  const required = ['MONGODB_URI', 'JWT_SECRET'];
+  const missing = required.filter(key => !process.env[key]);
+
+  if (missing.length > 0) {
+    console.error(`\n[FATAL ERROR] Missing required environment variables: ${missing.join(', ')}`);
+    console.error('Please configure them in your .env file. Exiting...\n');
+    process.exit(1);
+  }
+
+  const smtpRequired = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
+  const missingSmtp = smtpRequired.filter(key => !process.env[key]);
+  if (missingSmtp.length > 0) {
+    console.warn(`[WARNING] SMTP configuration variables are incomplete: ${missingSmtp.join(', ')}. Email service will fallback to mock logging.`);
+  } else {
+    console.log(`[CONFIG] SMTP mail configurations verified successfully.`);
+  }
+
+  console.log(`[CONFIG] Environment configuration validation passed.`);
+};
+
+validateEnv();
+
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
-
-// Connect to Database
-connectDB();
 
 // Global Middlewares
 app.use(cors());
@@ -38,9 +59,26 @@ app.get('/api', (req: Request, res: Response) => {
 // Global Error Handler Middleware (must be registered last)
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+// Start server after database connection is established
+const startServer = async () => {
+  try {
+    console.log('[STARTUP] Connecting to database...');
+    await connectDB();
+    
+    app.listen(PORT, () => {
+      console.log(`[STARTUP] Server successfully started and listening on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('[STARTUP FATAL] Failed to initialize database connection. Server not started.', error);
+    process.exit(1);
+  }
+};
+
+// Start or handle testing setup
+if (process.env.NODE_ENV === 'test') {
+  connectDB();
+} else {
+  startServer();
+}
 
 export default app;

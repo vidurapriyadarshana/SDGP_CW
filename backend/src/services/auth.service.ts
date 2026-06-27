@@ -3,6 +3,11 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 import { CustomError } from '../utils/CustomError';
+import { sendOTPEmail } from '../utils/email';
+
+const generateOTP = (): string => {
+  return Math.floor(100000 + Math.random() * 900000).toString(); // Generates a 6-digit code
+};
 
 export const registerUser = async (username: string, email: string, password: string, role: 'Admin' | 'Student') => {
   // Check if user already exists
@@ -12,10 +17,36 @@ export const registerUser = async (username: string, email: string, password: st
   }
 
   const passwordHash = await bcrypt.hash(password, 10);
-  const user = new User({ username, email, passwordHash, role });
+  const user = new User({ username, email, passwordHash, role, isVerified: false });
+
+  // Generate and set signup verification OTP
+  const otp = generateOTP();
+  user.otpCode = otp;
+  user.otpExpires = new Date(Date.now() + 600000); // 10 minutes validity
+  
+  await user.save();
+  await sendOTPEmail(email, otp, 'VERIFICATION');
+
+  return { email: user.email };
+};
+
+export const verifyAccount = async (email: string, otp: string) => {
+  const user = await User.findOne({
+    email,
+    otpCode: otp,
+    otpExpires: { $gt: new Date() }
+  });
+
+  if (!user) {
+    throw new CustomError('Invalid or expired verification code', 400);
+  }
+
+  user.isVerified = true;
+  user.otpCode = undefined;
+  user.otpExpires = undefined;
   await user.save();
 
-  return { userId: user._id };
+  return { message: 'Account successfully verified and activated' };
 };
 
 export const loginUser = async (email: string, password: string) => {
@@ -24,13 +55,51 @@ export const loginUser = async (email: string, password: string) => {
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
     throw new CustomError('Invalid credentials', 401);
   }
+
+  // Ensure user is verified first
+  if (!user.isVerified) {
+    // Generate new verification OTP to let them verify their account if needed
+    const otp = generateOTP();
+    user.otpCode = otp;
+    user.otpExpires = new Date(Date.now() + 600000);
+    await user.save();
+    await sendOTPEmail(email, otp, 'VERIFICATION');
+    throw new CustomError('Your account is not verified yet. A new verification OTP has been sent to your email.', 403);
+  }
+
+  // Generate and send Login 2FA OTP
+  const otp = generateOTP();
+  user.otpCode = otp;
+  user.otpExpires = new Date(Date.now() + 600000); // 10 minutes validity
   
+  await user.save();
+  await sendOTPEmail(email, otp, '2FA');
+
+  return { requiresOTP: true, email: user.email };
+};
+
+export const verifyLoginOTP = async (email: string, otp: string) => {
+  const user = await User.findOne({
+    email,
+    otpCode: otp,
+    otpExpires: { $gt: new Date() }
+  });
+
+  if (!user) {
+    throw new CustomError('Invalid or expired login code', 400);
+  }
+
+  // Clear OTP fields
+  user.otpCode = undefined;
+  user.otpExpires = undefined;
+  await user.save();
+
   const token = jwt.sign(
     { userId: user._id, role: user.role }, 
     process.env.JWT_SECRET as string, 
     { expiresIn: '2h' }
   );
-  
+
   return {
     token,
     user: { id: user._id, username: user.username, role: user.role }
@@ -86,4 +155,5 @@ export const resetUserPassword = async (token: string, newPassword: string) => {
 
   return { message: 'Password has been successfully updated' };
 };
+
 

@@ -8,6 +8,9 @@ export interface IUser extends Document {
   createdAt: Date;
   resetPasswordToken?: string;
   resetPasswordExpires?: Date;
+  isVerified: boolean;
+  otpCode?: string;
+  otpExpires?: Date;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -17,8 +20,12 @@ const UserSchema = new Schema<IUser>({
   role: { type: String, enum: ['Admin', 'Student'], required: true },
   createdAt: { type: Date, default: Date.now },
   resetPasswordToken: { type: String },
-  resetPasswordExpires: { type: Date }
+  resetPasswordExpires: { type: Date },
+  isVerified: { type: Boolean, default: false },
+  otpCode: { type: String },
+  otpExpires: { type: Date }
 });
 
 export default model<IUser>('User', UserSchema);
+
 
