@@ -7,26 +7,26 @@
 **Module Name:** Software Development Group Project  
 **Module Code:** 5COSC021C  
 **Module Leader:** Banuka Athuraliya  
-**Student Name:** [Your Name]  
-**Student ID:** [Your Student ID]  
+**Student Name:** Vidura Priyadarshana  
+**Student ID:** w1829302  
 **Submission Date:** 8th of January 2024  
 
 ---
 
 ## Declaration
-The student hereby declares that this individual report represents their own work, undertaken as part of the academic requirements of the Software Development Group Project module. All sections (Chapters 4, 5, and 6) have been authored individually, and all references to literature or external resources have been cited using the Westminster Harvard referencing style.
+The student hereby declares that this report represents their own individual work, undertaken as part of the academic requirements of the Software Development Group Project module. Chapters 4 to 6 have been authored individually, and all sources of information, datasets, code, and external literature have been cited and referenced using the Westminster Harvard referencing style.
 
 ---
 
 ## Abstract
-System engineering and requirements elicitation are crucial steps in building a reliable and secure software product. This individual report presents the functional specifications, legal implications, and architecture designs for a gamified Quiz Web Application. Chapter 4 provides a System Requirements Specification (SRS), analyzing stakeholders, elicitation feedback from academic target groups, and detailing UML Use Cases and functional boundaries. Chapter 5 evaluates Social, Legal, Ethical, and Professional (SLEP) issues in alignment with the British Computer Society (BCS) Code of Conduct, addressing user privacy, access standards, and content licensing. Chapter 6 describes the system design, featuring layered architectural diagrams, class models, sequence flows, activity flows, and interface wireframes.
+Traditional online assessment frameworks often fail to engage students effectively, resulting in passive participation and poor knowledge retention. This report presents the requirements specification, physical design, and architectural blueprint of the individual contribution components for an interactive, gamified, real-time Quiz Web Application. This document details the software engineering requirements (SRS) including stakeholder onion model analysis and elicitation surveys, British Computer Society (BCS) ethical compliance, General Data Protection Regulation (GDPR) mitigations, 3-tier layered system architectures, UML diagrams (domain class, sequence, activity), database schemas, relational data dictionaries, and REST API payload configurations.
 
-**Keywords:** Requirements Elicitation, Use Cases, BCS Code of Conduct, Layered Architecture, UML Modeling, System Design.
+**Keywords:** Requirements Elicitation, Use Cases, BCS Code of Conduct, Layered Architecture, UML Modeling, Database Schema, REST API.
 
 ---
 
 ## Acknowledgement
-The author wishes to thank the module team at the Informatics Institute of Technology (IIT) for providing the resources and feedback necessary to complete this individual design document. Sincere appreciation is also extended to the student peers who participated in the surveys and interviews during the requirements elicitation phase.
+The author extends sincere gratitude to the module leader, Banuka Athuraliya, and the tutorial instructors at the Informatics Institute of Technology (IIT) for their guidance and feedback throughout the design and documentation phase of this individual project. Appreciation is also expressed to the academic peers who participated in the surveys and interviews during the requirements elicitation process.
 
 ---
 
@@ -46,8 +46,8 @@ The author wishes to thank the module team at the Informatics Institute of Techn
 2. **Chapter 5: Social, Legal, Ethical and Professional Issues (SLEP)**
    * 5.1 Chapter Overview
    * 5.2 Dataset Ethical Clearance
-   * 5.3 SLEP Issues and Mitigation (BCS Code Alignment)
-   * 5.4 Chapter Summary
+   * 5.2 SLEP Issues and Mitigation
+   * 5.3 Chapter Summary
 3. **Chapter 6: System Architecture & Design**
    * 6.1 Chapter Overview
    * 6.2 System Architecture Design
@@ -56,6 +56,8 @@ The author wishes to thank the module team at the Informatics Institute of Techn
      * 6.3.2 Sequence Diagram
      * 6.3.3 UI Design and Mockups
      * 6.3.4 Activity Diagram
+     * 6.3.5 Database Schema & Data Dictionary
+     * 6.3.6 REST API Specifications
    * 6.4 Chapter Summary
 4. **References**
 5. **Appendix**
@@ -70,7 +72,7 @@ The author wishes to thank the module team at the Informatics Institute of Techn
 * **Figure 6.3:** UML Sequence Diagram: Timed Quiz Submission Flow
 * **Figure 6.4:** UI Client Screen Wireframes (Dashboard, Quiz Play, Results)
 * **Figure 6.5:** UML Activity Diagram: Student Quiz-Taking Lifecycle
-* **Figure 6.6 (UML ER):** System Entity-Relationship Diagram
+* **Figure 6.6:** System Entity-Relationship Diagram (ERD)
 
 ---
 
@@ -86,15 +88,20 @@ The author wishes to thank the module team at the Informatics Institute of Techn
 ## Abbreviations Table
 | Abbreviation | Full Form |
 | :--- | :--- |
+| **API** | Application Programming Interface |
 | **BCS** | British Computer Society |
+| **CRUD** | Create, Read, Update, Delete |
+| **ERD** | Entity-Relationship Diagram |
 | **GDPR** | General Data Protection Regulation |
 | **HTTPS** | Hypertext Transfer Protocol Secure |
+| **JWT** | JSON Web Token |
 | **MVC** | Model-View-Controller |
+| **MVP** | Minimum Viable Product |
 | **NFR** | Non-Functional Requirement |
-| **PDPA** | Personal Data Protection Act |
-| **REST** | Representational State Transfer |
+| **OOAD** | Object-Oriented Analysis and Design |
+| **RBAC** | Role-Based Access Control |
 | **SRS** | System Requirements Specification |
-| **UML** | Unified Modeling Language |
+| **UI/UX** | User Interface / User Experience |
 
 ---
 \pagebreak
@@ -146,7 +153,7 @@ graph TD
 | **Quiz Taker (Student)** | Functional Beneficiary | Requires an intuitive dashboard, clear timers, readable fonts, and instant feedback on quiz results. |
 | **Quiz Creator (Teacher)**| Functional Beneficiary | Needs an administrative interface to configure categories, create quizzes, customize timers, and review group metrics. |
 | **System Administrator** | Operational Beneficiary | Monitors database health, manages user credentials, and maintains application availability. |
-| **Software Developers** | Technical Expert | Responsible for system security, code clean-lines, database integrity, and feature deployments. |
+| **Software Developer** | Technical Expert | Responsible for system security, code clean-lines, database integrity, and feature deployments. |
 | **Institutional Management**| Financial Beneficiary | Evaluates the application's cost-efficiency and utility compared to licensed commercial alternatives. |
 | **Regulatory Authorities** | Regulatory Body | Enforces compliance with data protection laws (e.g., GDPR) for student credential storage. |
 
@@ -272,7 +279,7 @@ To seed the quiz database with questions, data was retrieved from the Open Trivi
 *   **Ethical Clearance:** Use of this dataset is compliant because it contains general knowledge questions and does not include personally identifiable information (PII).
 *   **Compliance:** In accordance with CC BY-SA 4.0 guidelines, the application attributes the source of the quiz questions in the footer documentation and shares modifications under the same license terms.
 
-### 5.3 SLEP Issues and Mitigation (BCS Code Alignment)
+### 5.2 SLEP Issues and Mitigation
 Development is guided by the British Computer Society (BCS) Code of Conduct, focusing on three core areas:
 
 1.  **The Public Interest (BCS Section 1a):**
@@ -285,7 +292,7 @@ Development is guided by the British Computer Society (BCS) Code of Conduct, foc
     *   *Issue:* Using unverified AI content generation or untested scoring calculations could result in incorrect grading and damage academic trust.
     *   *Mitigation:* All scoring calculations are performed on the backend using strict database mappings, and correct options are excluded from client-side network packages.
 
-### 5.4 Chapter Summary
+### 5.3 Chapter Summary
 Addressing SLEP requirements helps ensure the Quiz Web App is accessible, secure, and compliant. By adhering to the BCS Code of Conduct and respecting dataset licenses, the system supports data privacy regulations and accessibility standards.
 
 ---
@@ -579,6 +586,7 @@ erDiagram
         boolean is_correct
     }
 ```
+*Figure 6.6: System Entity-Relationship Diagram (ERD)*
 
 ##### Users Table
 Stores credentials, roles, and registration timelines.
@@ -938,6 +946,7 @@ This chapter detailed the system design for the Quiz Web App. The system uses a 
 
 # References
 *   Fowler, M., 2004. *UML Distilled: A Brief Guide to the Standard Object Modeling Language*. 3rd ed. Boston: Addison-Wesley.
+*   Larman, C., 2004. *Applying UML and Patterns: An Introduction to Object-Oriented Analysis and Design and Iterative Development*. 3rd ed. New Jersey: Prentice Hall.
 *   Sommerville, I., 2015. *Software Engineering*. 10th ed. Boston: Pearson.
 *   W3C, 2023. *Web Content Accessibility Guidelines (WCAG) 2.2*. Available from: https://www.w3.org/TR/WCAG22/ [Accessed 27 December 2023].
 *   Westminster Harvard, 2024. *Referencing Your Work: Using Westminster Harvard Guide*. London: University of Westminster Press.
@@ -946,13 +955,4 @@ This chapter detailed the system design for the Quiz Web App. The system uses a 
 \pagebreak
 
 # Appendix
-
-### Appendix A: Questionnaire Elicitation Form
-*   **Survey Focus:** Elicitation of client requirements for academic quiz platforms.
-*   **Sample Questions:**
-    1.  *Does a visible countdown timer motivate you or cause excessive anxiety?*
-        *   84% - Motivates me to focus and manage time.
-        *   16% - Causes anxiety, I prefer untimed quizzes.
-    2.  *Would you prefer to see your rank relative to other class peers?*
-        *   76% - Yes, on a dashboard leaderboard.
-        *   24% - No, I only want to see my own scores.
+(Individual appendix items can be detailed here if needed, such as personal research notes or local test payloads logs.)

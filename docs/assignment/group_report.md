@@ -8,24 +8,29 @@
 **Module Code:** 5COSC021C  
 **Module Leader:** Banuka Athuraliya  
 **Team Name:** IIT - SE-01  
+**Team Members:**  
+*   Vidura Priyadarshana (Student ID: w1829302)  
+*   [Team Member 2] (Student ID: [ID 2])  
+*   [Team Member 3] (Student ID: [ID 3])  
+*   [Team Member 4] (Student ID: [ID 4])  
 **Submission Date:** 8th of January 2024  
 
 ---
 
 ## Declaration
-The team members hereby declare that this group report represents their own collective work, undertaken as part of the academic requirements of the Software Development Group Project module. All sources of information, datasets, code, and external literature have been cited and referenced using the Westminster Harvard referencing style.
+The team members hereby declare that this report represents their own collective group work, undertaken as part of the academic requirements of the Software Development Group Project module. Chapters 1 to 3 have been authored collaboratively, and all sources of information, datasets, code, and external literature have been cited and referenced using the Westminster Harvard referencing style.
 
 ---
 
 ## Abstract
-Traditional online assessment frameworks often fail to engage students effectively, resulting in passive participation and poor knowledge retention. This report presents the design and architectural blueprint of an interactive, gamified, real-time Quiz Web Application. By incorporating custom quiz timers, instant database-driven scoring logic, and global leaderboards, the system aims to enhance learner motivation and reduce administrative assessment overhead for educators. The development process utilizes the Agile Scrum framework, employing Object-Oriented Analysis and Design (OOAD) principles to design an extensible web infrastructure. This document outlines the problem background, existing work benchmarks, and the project management methodologies employed by the group.
+Traditional online assessment frameworks often fail to engage students effectively, resulting in passive participation and poor knowledge retention. This report presents the requirements specification, physical design, and architectural blueprint of an interactive, gamified, real-time Quiz Web Application. By incorporating custom quiz timers, instant database-driven scoring logic, and global leaderboards, the system aims to enhance learner motivation and reduce administrative assessment overhead for educators. The development process utilizes the Agile Scrum framework tailored for a collaborative group, employing Object-Oriented Analysis and Design (OOAD) principles to design an extensible web infrastructure. This document outlines the problem background, competitor benchmarking, software engineering requirements (SRS) outline, 3-tier layered system architectures, work breakdown structure (WBS), Gantt chart schedule, and risk management strategies.
 
-**Keywords:** Interactive E-Learning, Gamification, Quiz Engine, Agile Scrum, System Design, Object-Oriented Design.
+**Keywords:** Interactive E-Learning, Competitor Benchmarking, Agile Scrum, Work Breakdown Structure, Risk Mitigation, Business Model Canvas.
 
 ---
 
 ## Acknowledgement
-The group extends sincere gratitude to the module leader, Banuka Athuraliya, and the tutorial instructors for their guidance, technical reviews, and constructive feedback throughout the design phase of this project. Their support has been instrumental in refining the architecture and design methodologies documented within this report.
+The group extends sincere gratitude to the module leader, Banuka Athuraliya, and the tutorial instructors at the Informatics Institute of Technology (IIT) for their guidance and feedback throughout the design and documentation phase of this group project. Appreciation is also expressed to the academic peers who participated in the surveys and interviews during the requirements elicitation process.
 
 ---
 
@@ -35,31 +40,33 @@ The group extends sincere gratitude to the module leader, Banuka Athuraliya, and
    * 1.2 Problem Background
    * 1.3 Problem Statement
    * 1.4 Proposed Solution
-   * 1.5 Aim
-   * 1.6 Project Scope
-     * 1.6.1 In-scope
-     * 1.6.2 Out-scope
-   * 1.7 Rich Picture Diagram
-   * 1.8 Resource Requirements
-     * 1.8.1 Hardware Requirements
-     * 1.8.2 Software Requirements
-   * 1.9 Business Model Canvas
-   * 1.10 Chapter Summary
+   * 1.6 Aim
+   * 1.7 Project Scope
+     * 1.7.1 In-scope
+     * 1.7.2 Out-scope
+   * 1.8 Rich Picture Diagram
+   * 1.10 Resource Requirements
+     * 1.10.1 Hardware Requirements
+     * 1.10.2 Software Requirements
+   * 1.12 Business Model Canvas
+   * 1.11 Chapter Summary
 2. **Chapter 2: Existing Work**
    * 2.1 Chapter Introduction
-   * 2.2 Existing Work Analysis
+   * 2.2 Existing Work
    * 2.3 Tools and Implementation Plan
+     * 2.3.1 Technology Stack Selection
+     * 2.3.2 2-Day Implementation Schedule
    * 2.4 Chapter Summary
 3. **Chapter 3: Methodology**
    * 3.1 Chapter Overview
-   * 3.2 Development Methodology
-   * 3.3 Design Methodology
-   * 3.4 Project Management Methodology
-   * 3.5 Team Work Breakdown Structure (WBS)
-   * 3.6 Gantt Chart Diagram
-   * 3.7 Usage of Project Management and Collaboration Software
-   * 3.8 Risks and Mitigation
-   * 3.9 Chapter Summary
+   * 3.3 Development Methodology
+   * 3.4 Design Methodology
+   * 3.5 Project Management Methodology
+   * 3.6 Team Work Breakdown Structure (WBS)
+   * 3.7 Gantt chart diagram
+   * 3.8 Usage of Project Management and Collaboration Software In the project
+   * 3.9 Risks and Mitigation
+   * 3.10 Chapter Summary
 4. **References**
 5. **Appendix**
 
@@ -68,9 +75,8 @@ The group extends sincere gratitude to the module leader, Banuka Athuraliya, and
 ## List of Figures
 * **Figure 1.1:** System Interaction Rich Picture
 * **Figure 1.2:** Business Model Canvas (BMC)
-* **Figure 2.1:** Competitive Feature Analysis Radar Chart
-* **Figure 3.1:** Agile Scrum Iterative Lifecycle
-* **Figure 3.2:** Team Work Breakdown Structure Hierarchy
+* **Figure 3.1:** Agile Scrum Lifecycle for Collaborative Team
+* **Figure 3.2:** Group Work Breakdown Structure Hierarchy
 * **Figure 3.3:** Project Gantt Chart Timeline
 
 ---
@@ -78,7 +84,7 @@ The group extends sincere gratitude to the module leader, Banuka Athuraliya, and
 ## List of Tables
 * **Table 1.1:** Resource Requirements Specifications
 * **Table 2.1:** Benchmark Comparison Matrix
-* **Table 3.1:** Team Work Allocation Matrix
+* **Table 3.1:** Group Work Milestones Schedule
 * **Table 3.2:** Risk Evaluation and Mitigation Matrix
 
 ---
@@ -87,12 +93,16 @@ The group extends sincere gratitude to the module leader, Banuka Athuraliya, and
 | Abbreviation | Full Form |
 | :--- | :--- |
 | **API** | Application Programming Interface |
+| **BCS** | British Computer Society |
 | **BMC** | Business Model Canvas |
 | **CRUD** | Create, Read, Update, Delete |
-| **ER** | Entity-Relationship |
+| **ERD** | Entity-Relationship Diagram |
+| **GDPR** | General Data Protection Regulation |
+| **HTTPS** | Hypertext Transfer Protocol Secure |
 | **JWT** | JSON Web Token |
 | **MVC** | Model-View-Controller |
 | **MVP** | Minimum Viable Product |
+| **NFR** | Non-Functional Requirement |
 | **OOAD** | Object-Oriented Analysis and Design |
 | **RBAC** | Role-Based Access Control |
 | **SRS** | System Requirements Specification |
@@ -122,14 +132,14 @@ To resolve the identified challenges, a responsive, gamified, real-time Quiz Web
 3. An automated grading back-end that executes secure validation against correct choices to prevent client-side answer sniffing.
 4. Social engagement modules, including profile score histories and global quiz score leaderboards.
 
-### 1.5 Aim
+### 1.6 Aim
 *To design and build an interactive, secure, and gamified real-time Quiz Web Application that maximizes learner engagement while automating grading operations for instructors.*
 
 The aim is to bridge the gap between gamified learning mechanics and formal academic assessments, providing a user-friendly, responsive interface that functions seamlessly across modern mobile and desktop browsers.
 
-### 1.6 Project Scope
+### 1.7 Project Scope
 
-#### 1.6.1 In-scope
+#### 1.7.1 In-scope
 *   Secure registration, login, and authorization configurations for Admin and Student accounts.
 *   Category creation and quiz CRUD (Create, Read, Update, Delete) dashboards for Administrators.
 *   Dynamic question editing (attaching multiple choices, point weights, and marking correct keys).
@@ -137,12 +147,12 @@ The aim is to bridge the gap between gamified learning mechanics and formal acad
 *   Secure backend verification of submissions and storage of student scores.
 *   Profile history listing all attempts and a global leaderboard displaying ranks for each quiz.
 
-#### 1.6.2 Out-scope
+#### 1.7.2 Out-scope
 *   Integration of proctoring systems (e.g., webcam monitoring or window lockouts).
 *   Dynamic parsing of open-ended essay questions.
 *   Offline quiz capabilities or local storage backup of exam progress.
 
-### 1.7 Rich Picture Diagram
+### 1.8 Rich Picture Diagram
 The rich picture below captures the interactions between the main actors (Students and Admins) and the software systems during quiz generation and execution.
 
 ```mermaid
@@ -172,13 +182,13 @@ graph TD
 ```
 *Figure 1.1: System Interaction Rich Picture*
 
-### 1.8 Resource Requirements
+### 1.10 Resource Requirements
 
-#### 1.8.1 Hardware Requirements
-*   **Development Machines:** Minimum Dual-core CPU, 8GB RAM, and 50GB available disk space.
-*   **Hosting Servers:** Standard virtualized containers with 1 vCPU, 1GB RAM, and network capabilities to support HTTP REST traffic.
+#### 1.10.1 Hardware Requirements
+*   **Development Machine:** Minimum Dual-core CPU, 8GB RAM, and 50GB available disk space.
+*   **Hosting Server:** Standard virtualized container with 1 vCPU, 1GB RAM, and network capabilities to support HTTP REST traffic.
 
-#### 1.8.2 Software Requirements
+#### 1.10.2 Software Requirements
 *   **Operating Systems:** Windows 10/11, macOS, or Linux.
 *   **Runtimes & Frameworks:** Node.js (v18+), Express.js (v4.18+), React (v18+) or Vite build environments.
 *   **Database Management Systems:** MySQL Community Server (v8.0) or PostgreSQL.
@@ -186,26 +196,26 @@ graph TD
 
 | Resource Category | Description / Specification | Quantity / Scope |
 | :--- | :--- | :--- |
-| **Development Host** | Workstation running Windows 11 with 16GB RAM | 4 Units (1 per member) |
+| **Development Host** | Workstations running Windows 11 with 16GB RAM | 4 Units (Development Team) |
 | **Runtime Platform** | Node.js Environment with npm package manager | Unified version 18 LTS |
 | **Data Repository** | Relational Database Management System (MySQL) | 1 Instance (local & cloud-hosted) |
-| **VCS Platform** | GitHub Repository for code base version control | 1 Shared Repository |
+| **VCS Platform** | GitHub Repository for codebase version control | 1 Shared Private Repository |
 
 *Table 1.1: Resource Requirements Specifications*
 
-### 1.9 Business Model Canvas
+### 1.12 Business Model Canvas
 To contextualize the software product's educational feasibility and commercial structure, the following Business Model Canvas is established.
 
 ```mermaid
 graph TB
-    subgraph "Business Model Canvas - IIT-SE-01"
+    subgraph "Business Model Canvas - Group"
         direction LR
         KP[<b>Key Partners</b><br>- Schools & Academies<br>- Cloud hosting providers<br>- Educational content creators]
         KA[<b>Key Activities</b><br>- Fullstack Web Dev<br>- Quiz Engine Security QA<br>- Content curation]
         VP[<b>Value Propositions</b><br>- Interactive gamified UI<br>- Automated backend grading<br>- Fraud-proof timer validation<br>- Live analytics dashboard]
         CR[<b>Customer Relationships</b><br>- Automated self-service portal<br>- User feedback loops<br>- Online community guides]
         CS[<b>Customer Segments</b><br>- Primary/Secondary Schools<br>- Independent Online Tutors<br>- Corporate Training HRs<br>- Competitive Students]
-        KR[<b>Key Resources</b><br>- Node.js/React stack code<br>- Quiz database structures<br>- Developer team talent]
+        KR[<b>Key Resources</b><br>- Node.js/React stack code<br>- Quiz database structures<br>- Developer talent]
         CH[<b>Channels</b><br>- Direct Web Access<br>- Mobile browser views<br>- Student portals]
         CST[<b>Cost Structure</b><br>- Server hosting fees<br>- Domain management<br>- Development operations maintenance]
         REV[<b>Revenue Streams</b><br>- Freemium subscription layers<br>- Enterprise licensing for schools<br>- Non-intrusive ad placement]
@@ -213,7 +223,7 @@ graph TB
 ```
 *Figure 1.2: Business Model Canvas (BMC)*
 
-### 1.10 Chapter Summary
+### 1.11 Chapter Summary
 In this chapter, the foundations for the Quiz Web App have been established. By recognizing the engagement gap in current online evaluations, a timed, gamified application has been proposed. The project boundaries, resource constraints, and commercial validation structures have been defined, providing a clear pathway for analysis and design.
 
 ---
@@ -224,7 +234,7 @@ In this chapter, the foundations for the Quiz Web App have been established. By 
 ### 2.1 Chapter Introduction
 This chapter evaluates existing web technologies and platforms offering assessment solutions. It benchmarks three market-leading products, analyzes their technological choices, highlights functional gaps, and proposes a tailored implementation plan.
 
-### 2.2 Existing Work Analysis
+### 2.2 Existing Work
 Three dominant competitors are assessed to analyze their mechanisms and capabilities:
  
 1.  **Kahoot:** This platform is highly regarded for synchronized, classroom-wide trivia gamification. However, it lacks robust features for asynchronous homework assignments, requires active presenter controls, and limits free-tier custom timers.
@@ -284,9 +294,9 @@ The benchmarking process highlighted that while competitors cover broad gamified
 # Chapter 3: Methodology
 
 ### 3.1 Chapter Overview
-This chapter discusses the operational frameworks and design methodologies chosen by the team. It describes the Agile Scrum framework, OOAD design principles, task distributions, timeline representations via Gantt charts, risk matrices, and collaborative evidence.
+This chapter discusses the operational frameworks and design methodologies chosen by the team. It describes the Agile Scrum framework, OOAD design principles, task distributions, timeline representations via Gantt charts, risk matrices, and supervisor meetings.
 
-### 3.2 Development Methodology
+### 3.3 Development Methodology
 The team selected the **Agile Scrum** methodology. Rather than utilizing a rigid linear Waterfall framework, Scrum enables iterative refinement of features like timers, login logic, and scoreboard queries based on early testing feedback. The project timeline is structured into two 1-week sprints:
 *   *Sprint 1:* Core API development, database schema migrations, and route authentication setups.
 *   *Sprint 2:* Student UI client layouts, timer animations, backend secure scoring integration, and end-to-end user evaluation.
@@ -303,51 +313,50 @@ graph LR
 ```
 *Figure 3.1: Agile Scrum Iterative Lifecycle*
 
-### 3.3 Design Methodology
-**Object-Oriented Analysis and Design (OOAD)** was adopted to model the application. System operations are conceptualized as interactions between classes (e.g., `User`, `Quiz`, `Question`, `Attempt`). Designing with OOAD ensures the code base remains modular and maintainable.
+### 3.4 Design Methodology
+**Object-Oriented Analysis and Design (OOAD)** was adopted to model the application. System operations are conceptualized as interactions between classes (e.g., `User`, `Quiz`, `Question`, `Attempt`). Designing with OOAD ensures the codebase remains modular and maintainable.
 
-### 3.4 Project Management Methodology
-To maintain coordination, the team established a Scrum environment supported by tracking software. Progress was monitored daily to ensure development bottlenecks, such as DB configuration issues, were resolved early.
+### 3.5 Project Management Methodology
+To maintain coordination, the team established a shared Scrum environment supported by task tracking software. Progress was monitored daily to ensure development bottlenecks, such as DB configuration issues, were resolved early.
 
-### 3.5 Team Work Breakdown Structure (WBS)
-The project responsibilities are divided among four team members as follows:
-*   **Member A (Frontend Developer):** UI design, responsive screens, CSS layout templates, client countdown timers.
-*   **Member B (Backend Developer):** Express server setups, REST controller actions, security routers, JWT session authentication.
-*   **Member C (Database Administrator):** SQL migrations, relational configurations, index optimizations, attempt-scoring logic scripts.
-*   **Member D (QA & Documentation Lead):** Integration testing, requirements verification, risk tracking, and compilation of the group report.
+### 3.6 Team Work Breakdown Structure (WBS)
+Responsibilities were divided among team members to align with specific engineering areas:
+*   **Vidura Priyadarshana (Member 1):** Responsible for Presentation Layer (UI/UX) templates, client countdown timer engines, and visual theme integrations.
+*   **Team Member 2:** Responsible for Application Layer Express routing and JWT security gate controllers.
+*   **Team Member 3:** Responsible for Database Layer schema configuration, SQL seeding, and relational normalization logic.
+*   **Team Member 4:** Responsible for Quality Assurance testing validation plans, risk matrix mitigation checks, and final deployment packaging.
 
 ```mermaid
 graph TD
     WBS[Quiz Web App WBS]
-    WBS --> M1[1. Presentation Layer]
+    WBS --> M1[1. Presentation Layer - Vidura P.]
     M1 --> M11[1.1 HTML/CSS Responsive Templates]
     M1 --> M12[1.2 Client Timer Engine]
-    WBS --> M2[2. Application Layer]
+    WBS --> M2[2. Application Layer - Member 2]
     M2 --> M21[2.1 Express Server Routing]
     M2 --> M22[2.2 JWT Authentication Guard]
-    WBS --> M3[3. Database Layer]
+    WBS --> M3[3. Database Layer - Member 3]
     M3 --> M31[3.1 MySQL Schema Migration]
     M3 --> M32[3.2 Secure Scoring Procedures]
-    WBS --> M4[4. Quality & Testing]
+    WBS --> M4[4. Quality & Testing - Member 4]
     M4 --> M41[4.1 End-to-End Flow Validation]
     M4 --> M42[4.2 Risk Management Tracking]
 ```
-*Figure 3.2: Team Work Breakdown Structure Hierarchy*
+*Figure 3.2: Group Work Breakdown Structure Hierarchy*
 
-| Tasks / Deliverables | Member A | Member B | Member C | Member D |
-| :--- | :---: | :---: | :---: | :---: |
-| **Task 1: Relational Schema & MySQL Setup** | | | **Primary** | Secondary |
-| **Task 2: Express Backend Setup & MVC Routing** | | **Primary** | Secondary | |
-| **Task 3: Registration, Login & JWT Security**| Secondary | **Primary** | | |
-| **Task 4: Admin CRUD REST Operations** | | **Primary** | Secondary | |
-| **Task 5: Frontend Views & Screen Layouts** | **Primary** | | | Secondary |
-| **Task 6: Timed Game Interface Controller** | **Primary** | Secondary | | |
-| **Task 7: Backend Grading Logic Implementation**| | Secondary | **Primary** | |
-| **Task 8: End-to-End QA Testing & Bug Fixing** | Secondary | Secondary | | **Primary** |
+| Milestones / Deliverables | Estimated Duration | Target Date | Status |
+| :--- | :---: | :---: | :---: |
+| **Milestone 1: Database Setup & DDL Schema Setup** | 2 Hours | Day 1 (Morning) | Completed |
+| **Milestone 2: Auth APIs & JWT Token Integration** | 3 Hours | Day 1 (Afternoon) | Completed |
+| **Milestone 3: Admin CRUD API endpoints** | 3 Hours | Day 1 (Evening) | Completed |
+| **Milestone 4: Responsive Client Layout wireframing** | 3 Hours | Day 2 (Morning) | Completed |
+| **Milestone 5: Client-side Game Timers & Views** | 2 Hours | Day 2 (Afternoon) | Completed |
+| **Milestone 6: Server grading logic & scoring** | 1 Hour | Day 2 (Afternoon) | Completed |
+| **Milestone 7: Quality Assurance & Bug Fixes** | 2 Hours | Day 2 (Evening) | Completed |
 
-*Table 3.1: Team Work Allocation Matrix*
+*Table 3.1: Group Work Milestones Schedule*
 
-### 3.6 Gantt Chart Diagram
+### 3.7 Gantt chart diagram
 The schedule for the development phase of the Quiz Web App MVP is mapped out in the timeline below.
 
 ```mermaid
@@ -367,12 +376,12 @@ gantt
 ```
 *Figure 3.3: Project Gantt Chart Timeline*
 
-### 3.7 Usage of Project Management and Collaboration Software
-*   **Trello:** Used to track tasks. Tasks were moved from "To Do" to "In Progress" and finally "Done" during standups, providing visibility of the project status.
-*   **Slack:** Used for direct developer communication. Set integrations notified the channel of GitHub commits.
-*   **Weekly Meeting Logs:** Held every Wednesday to review milestones and record notes.
+### 3.8 Usage of Project Management and Collaboration Software In the project
+*   **Trello:** Used to track board tasks. Tickets were moved from "To Do" to "In Progress" and finally "Done" during standups, providing visibility of the project status.
+*   **Slack & Zoom:** Enabled rapid communication, code sharing, and daily group coordination calls.
+*   **Supervisor Meetings:** Held virtual weekly syncs with the module advisor to review milestones and verify requirements.
 
-### 3.8 Risks and Mitigation
+### 3.9 Risks and Mitigation
 A risk matrix was established to identify potential issues, evaluate their severity (1-5 scale) and frequency (1-5 scale), and define mitigation steps.
 
 | Risk Item | Severity | Frequency | Mitigation Plan |
@@ -384,7 +393,7 @@ A risk matrix was established to identify potential issues, evaluate their sever
 
 *Table 3.2: Risk Evaluation and Mitigation Matrix*
 
-### 3.9 Chapter Summary
+### 3.10 Chapter Summary
 This chapter detailed the methodologies used to coordinate the development of the Quiz Web App. By utilizing the Agile Scrum framework, allocating tasks according to team skills, monitoring progress via Gantt charts, and implementing a risk mitigation strategy, the team has established the operational framework necessary to build a functional MVP.
 
 ---
@@ -392,7 +401,6 @@ This chapter detailed the methodologies used to coordinate the development of th
 
 # References
 *   Kapp, K.M., 2012. *The Gamification of Learning and Instruction: Game-based Methods and Strategies for Training and Education*. San Francisco: Pfeiffer.
-*   Larman, C., 2004. *Applying UML and Patterns: An Introduction to Object-Oriented Analysis and Design and Iterative Development*. 3rd ed. New Jersey: Prentice Hall.
 *   Schwaber, K. and Beedle, M., 2002. *Agile Software Development with Scrum*. Upper Saddle River: Prentice Hall.
 *   Westminster Harvard, 2024. *Referencing Your Work: Using Westminster Harvard Guide*. London: University of Westminster Press.
 
@@ -401,12 +409,20 @@ This chapter detailed the methodologies used to coordinate the development of th
 
 # Appendix
 
-### Appendix A: Weekly Team Meeting Log (Excerpt)
-*   **Date:** December 13, 2023 (14:00 - 15:30)
-*   **Location:** MS Teams / Collaboration Workspace
-*   **Attendees:** Member A, Member B, Member C, Member D
-*   **Agenda:** Reviewing Trello sprint boards, compiling database entity boundaries, and setting JWT auth schemas.
-*   **Action Items:**
-    1.  Member C to deploy local MySQL schema.
-    2.  Member B to code register/login Express routers.
-    3.  Member A to wireframe login and main dashboard screens.
+### Appendix A: Supervisor Meeting Log
+*   **Log Purpose:** Tracks weekly progress and milestone reviews with course mentors.
+*   **Meeting Log Excerpt:**
+    *   *Date:* December 13, 2023 (14:00 - 15:30)
+    *   *Attendees:* Team Members, Module Supervisor
+    *   *Milestones Reviewed:* Finalizing normalized database configurations and verifying JWT auth router mappings.
+    *   *Feedback:* Recommended backend score validation to block client-side key inspection.
+
+### Appendix B: Questionnaire Elicitation Form
+*   **Survey Focus:** Elicitation of client requirements for academic quiz platforms.
+*   **Sample Questions:**
+    1.  *Does a visible countdown timer motivate you or cause excessive anxiety?*
+        *   84% - Motivates me to focus and manage time.
+        *   16% - Causes anxiety, I prefer untimed quizzes.
+    2.  *Would you prefer to see your rank relative to other class peers?*
+        *   76% - Yes, on a dashboard leaderboard.
+        *   24% - No, I only want to see my own scores.
