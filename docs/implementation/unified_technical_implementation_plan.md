@@ -7,7 +7,7 @@ This document serves as the single source of truth for the technical design, sys
 ## 1. System Architecture (MERN 3-Tier Layered)
 
 The application separates operations into three decoupled layers:
-*   **Presentation Layer (Client):** A single-page application (SPA) built with **React**, configured using **Vite**, written in **TypeScript**, and styled with **Tailwind CSS**. It communicates with the backend REST server asynchronously via standard HTTP/fetch requests, maintains visual states, and executes the client-side countdown timer.
+*   **Presentation Layer (Client):** A single-page application (SPA) built with **React**, configured using **Vite**, written in **TypeScript**, and styled with **Tailwind CSS**. It communicates with the backend REST server asynchronously via **Axios** client requests (utilising request interceptors for automated JWT authorization header attachment), maintains visual states, and executes the client-side gameplay countdown timer.
 *   **Business Logic Layer (API Server):** A RESTful API engine powered by **Node.js** and **Express**. It handles API routing, validates session JWTs via middleware guards, and processes grading logic securely server-side.
 *   **Data Access Layer (Database):** A document-based **MongoDB** database. Schemas and collections are defined and managed through the **Mongoose ODM** for clean validation, casting, and model operations.
 
@@ -66,8 +66,12 @@ quiz-app-mern/
 ├── frontend/                       # React + Vite Client
 │   ├── public/
 │   ├── src/
-│   │   ├── components/             # Reusable UI parts (Timer, Cards, Buttons)
-│   │   │   ├── Button.tsx
+│   │   ├── components/             # Shared layout and timer components
+│   │   │   ├── ui/                 # Shadcn UI primitives (automatically managed)
+│   │   │   │   ├── button.tsx
+│   │   │   │   ├── card.tsx
+│   │   │   │   ├── progress.tsx
+│   │   │   │   └── alert.tsx
 │   │   │   ├── Navbar.tsx
 │   │   │   └── Timer.tsx
 │   │   ├── context/
@@ -414,17 +418,74 @@ All protected routes require an authorization bearer token in the HTTP header:
 
 ### Day 2: Frontend Integration & Gameplay Loop
 
-#### Task 5: React UI Creation with Tailwind CSS (Hours 0.0 - 3.0)
+#### Task 5: React UI Creation with Tailwind, Axios & Shadcn Setup (Hours 0.0 - 3.0)
 1.  **Scaffolding UI**: Initialize client app and install dependencies:
     ```bash
     npx create-vite@latest frontend --template react-ts
     cd frontend
-    npm install tailwindcss postcss autoprefixer react-router-dom
+    npm install tailwindcss postcss autoprefixer react-router-dom axios lucide-react class-variance-authority clsx tailwind-merge @types/node
     npx tailwindcss init -p
     ```
-2.  **Tailwind Settings**: Link Tailwind directives in `src/index.css` and configure `tailwind.config.js` content paths to parse JSX files.
-3.  **Authentication Pages**: Setup register and login screens with responsive CSS grid card shapes and form fields.
-4.  **Admin and Student Dashboards**: Create clean grid panels displaying card-based quiz categorizations.
+2.  **Path Configuration**: Update `tsconfig.json` (or `tsconfig.app.json`) and `vite.config.ts` to support path aliases (`@/*` mapping to `src/*`) required for shadcn/ui:
+    *   *tsconfig.json* paths addition:
+        ```json
+        "compilerOptions": {
+          "baseUrl": ".",
+          "paths": {
+            "@/*": ["./src/*"]
+          }
+        }
+        ```
+    *   *vite.config.ts* config:
+        ```typescript
+        import path from "path"
+        import react from "@vitejs/plugin-react"
+        import { defineConfig } from "vite"
+
+        export default defineConfig({
+          plugins: [react()],
+          resolve: {
+            alias: {
+              "@": path.resolve(__dirname, "./src"),
+            },
+          },
+        })
+        ```
+3.  **Initialize Shadcn/UI**: Run the CLI setup utility:
+    ```bash
+    npx shadcn@latest init -y
+    ```
+4.  **Install Components**: Add the primary card, button, timer progress bar, and dialog primitives:
+    ```bash
+    npx shadcn@latest add button card progress dialog alert
+    ```
+5.  **Tailwind Settings**: Link Tailwind directives in `src/index.css` and configure `tailwind.config.js` content paths to parse JSX files.
+6.  **API Client Setup**: Write the Axios instance configuration in `frontend/src/utils/api.ts` to automatically inject the bearer token:
+    ```typescript
+    import axios from 'axios';
+
+    const api = axios.create({
+      baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    // Request Interceptor: Automatically inject JWT Bearer Token if found
+    api.interceptors.request.use((config) => {
+      const token = localStorage.getItem('token');
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    }, (error) => {
+      return Promise.reject(error);
+    });
+
+    export default api;
+    ```
+7.  **Authentication Pages**: Setup register and login screens with responsive CSS grid card shapes and form fields.
+8.  **Admin and Student Dashboards**: Create clean grid panels displaying card-based quiz categorizations.
 
 #### Task 6: Client Timer Engine & Gameplay Navigation (Hours 3.0 - 5.0)
 1.  **Quiz Player state**: Setup components tracking current index pointers, selection hashes, and time bounds.
