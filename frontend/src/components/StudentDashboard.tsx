@@ -101,7 +101,7 @@ export default function StudentDashboard() {
           </Button>
           <Button 
             onClick={logout}
-            className="bg-red-500/10 border border-red-500/20 hover:bg-red-500 hover:text-white text-red-400 transition-all duration-300 gap-2 h-9 px-4 rounded-lg"
+            className="bg-red-500/10 border border-red-500/20 hover:bg-red-500 text-white transition-all duration-300 gap-2 h-9 px-4 rounded-lg"
           >
             <LogOut className="h-4 w-4" /> Sign Out
           </Button>
