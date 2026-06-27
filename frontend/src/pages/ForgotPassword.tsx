@@ -10,8 +10,7 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [resetData, setResetData] = useState<{ resetToken: string; resetUrl: string } | null>(null);
-  const [copied, setCopied] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,8 +18,8 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await api.post('/auth/forgot-password', { email });
-      setResetData(response.data.data);
+      await api.post('/auth/forgot-password', { email });
+      setSuccess(true);
     } catch (err: any) {
       console.error(err);
       setError(
@@ -30,14 +29,6 @@ export default function ForgotPassword() {
       );
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleCopy = () => {
-    if (resetData) {
-      navigator.clipboard.writeText(resetData.resetUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     }
   };
 
@@ -61,38 +52,19 @@ export default function ForgotPassword() {
         </CardHeader>
 
         <CardContent>
-          {resetData ? (
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2 text-emerald-400 bg-emerald-500/10 p-3 rounded-lg border border-emerald-500/20">
-                <CheckCircle2 className="h-5 w-5 shrink-0" />
-                <span className="text-sm font-medium">Reset request successful!</span>
+          {success ? (
+            <div className="text-center py-6 space-y-4 animate-fadeIn">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
+                <CheckCircle2 className="h-10 w-10 animate-bounce" />
               </div>
-
-              <div className="space-y-2 bg-slate-950/70 p-4 rounded-lg border border-slate-800 text-xs">
-                <p className="text-slate-400 font-semibold mb-1 uppercase tracking-wider text-[10px]">
-                  Development Testing Tool:
-                </p>
-                <p className="text-slate-300 select-all break-all mb-2 font-mono">
-                  Token: {resetData.resetToken}
-                </p>
-                <div className="flex items-center justify-between gap-2 mt-3 bg-slate-900 p-2 rounded border border-slate-800">
-                  <span className="text-slate-400 font-mono overflow-hidden text-ellipsis whitespace-nowrap block max-w-[250px]">
-                    {resetData.resetUrl}
-                  </span>
-                  <button
-                    onClick={handleCopy}
-                    type="button"
-                    className="shrink-0 p-1.5 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-all"
-                    title="Copy reset link"
-                  >
-                    {copied ? 'Copied!' : <Clipboard className="h-4 w-4" />}
-                  </button>
-                </div>
-              </div>
-
-              <Link to={`/reset-password?token=${resetData.resetToken}`}>
-                <Button className="w-full h-11 bg-emerald-600 hover:bg-emerald-700 text-white mt-2">
-                  Proceed to Reset Screen
+              <Alert className="bg-emerald-500/10 border-emerald-500/20 text-emerald-400 text-center">
+                <AlertDescription className="font-semibold text-sm">
+                  We have sent a password reset link to your registered email address. Please check your inbox.
+                </AlertDescription>
+              </Alert>
+              <Link to="/login">
+                <Button className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white mt-4 font-semibold">
+                  Back to Sign In
                 </Button>
               </Link>
             </div>
@@ -124,9 +96,9 @@ export default function ForgotPassword() {
               <Button
                 type="submit"
                 loading={loading}
-                className="w-full mt-2 h-11 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white"
+                className="w-full mt-2 h-11 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold"
               >
-                Request Reset Token
+                Request Reset Link
               </Button>
             </form>
           )}

@@ -102,17 +102,7 @@ export default function ResetPassword() {
                 </Alert>
               )}
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Reset Token</label>
-                <input
-                  type="text"
-                  required
-                  value={token}
-                  onChange={(e) => setToken(e.target.value)}
-                  placeholder="Enter your reset token"
-                  className="w-full h-11 px-3 rounded-lg border border-slate-800 bg-slate-950/50 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300 font-mono text-sm"
-                />
-              </div>
+
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-300">New Password</label>

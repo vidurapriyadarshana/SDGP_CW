@@ -104,18 +104,7 @@ export default function CompleteRegistration() {
                 </Alert>
               )}
 
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-300">Invite Token</label>
-                <input
-                  type="text"
-                  required
-                  disabled={!!new URLSearchParams(location.search).get('token')}
-                  value={token}
-                  onChange={(e) => setToken(e.target.value)}
-                  placeholder="Invite token will populate automatically"
-                  className="w-full h-11 px-3 rounded-lg border border-slate-800 bg-slate-950/30 text-slate-400 placeholder-slate-600 focus:outline-none transition-all font-mono text-xs"
-                />
-              </div>
+
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-slate-300">Create Password</label>

@@ -140,7 +140,47 @@ export const requestPasswordReset = async (email: string) => {
 
   // Generate reset URL for local logging/testing
   const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password?token=${resetToken}`;
+  
+  const subject = 'Password Reset - Quiz Web App';
+  const textContent = `Please reset your password using the following link: ${resetUrl}`;
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+      <h2 style="color: #4f46e5; text-align: center;">Quiz Web App - Password Reset</h2>
+      <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+      <p style="font-size: 16px; color: #334155;">Hello,</p>
+      <p style="font-size: 16px; color: #334155;">
+        You are receiving this email because a password reset request was requested for your account. Please click the button below to set up a new password:
+      </p>
+      <div style="text-align: center; margin: 25px 0;">
+        <a href="${resetUrl}" style="background-color: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Reset Password</a>
+      </div>
+      <p style="font-size: 12px; color: #64748b; text-align: center;">
+        If you did not request a password reset, you can safely ignore this email.
+      </p>
+      <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+      <p style="font-size: 12px; color: #94a3b8; text-align: center;">
+        Quiz Web App © ${new Date().getFullYear()}
+      </p>
+    </div>
+  `;
+
+  if (isMailConfigured && mailTransporter) {
+    try {
+      await mailTransporter.sendMail({
+        from: mailConfig.from,
+        to: email,
+        subject: subject,
+        text: textContent,
+        html: htmlContent
+      });
+    } catch (error) {
+      console.error(`[PASSWORD RESET EMAIL ERROR] Failed to send email to ${email}:`, error);
+    }
+  }
+
+  console.log('\n' + '='.repeat(60));
   console.log(`[PASSWORD RESET LINK]: ${resetUrl}`);
+  console.log('='.repeat(60) + '\n');
   
   return { resetToken, resetUrl };
 };
