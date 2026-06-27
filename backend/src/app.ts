@@ -22,12 +22,17 @@ const validateEnv = (): void => {
     process.exit(1);
   }
 
-  const smtpRequired = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
-  const missingSmtp = smtpRequired.filter(key => !process.env[key]);
-  if (missingSmtp.length > 0) {
-    console.warn(`[WARNING] SMTP configuration variables are incomplete: ${missingSmtp.join(', ')}. Email service will fallback to mock logging.`);
+  const provider = (process.env.EMAIL_PROVIDER || 'mock').toLowerCase();
+  if (provider === 'nodemailer') {
+    const smtpRequired = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'];
+    const missingSmtp = smtpRequired.filter(key => !process.env[key]);
+    if (missingSmtp.length > 0) {
+      console.warn(`[WARNING] EMAIL_PROVIDER is set to 'nodemailer', but SMTP configurations are incomplete: ${missingSmtp.join(', ')}. Email service will fallback to mock logging.`);
+    } else {
+      console.log(`[CONFIG] SMTP mail configurations verified successfully.`);
+    }
   } else {
-    console.log(`[CONFIG] SMTP mail configurations verified successfully.`);
+    console.log(`[CONFIG] Email provider is set to '${provider}'. Email service will run in mock logging mode.`);
   }
 
   console.log(`[CONFIG] Environment configuration validation passed.`);
