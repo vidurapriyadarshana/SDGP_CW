@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, getProfile, forgotPassword, resetPassword, verifyAccount, verifyLogin } from '../controllers/auth.controller';
+import { register, login, getProfile, forgotPassword, resetPassword, verifyAccount, verifyLogin, completeRegistration } from '../controllers/auth.controller';
 import { authMiddleware } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -175,5 +175,6 @@ router.post('/verify-account', verifyAccount);
  *         description: Invalid or expired OTP code
  */
 router.post('/verify-login', verifyLogin);
+router.post('/complete-registration', completeRegistration);
 
 export default router;

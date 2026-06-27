@@ -73,5 +73,15 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
   }
 };
 
+export const completeRegistration = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { token, password } = req.body;
+    const result = await authService.completeAdminRegistration(token, password);
+    sendSuccess(res, result.message, null, 200);
+  } catch (error) {
+    next(error);
+  }
+};
+
 
 

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCategory, createQuiz, addQuestion, createAdmin } from '../controllers/admin.controller';
+import { createCategory, createQuiz, addQuestion, createAdmin, getCategories, getQuizzes, getUsers, deleteUser } from '../controllers/admin.controller';
 import { authMiddleware, roleGuard } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -34,6 +34,7 @@ router.use(roleGuard(['Admin']));
  *         description: Forbidden
  */
 router.post('/categories', createCategory);
+router.get('/categories', getCategories);
 
 /**
  * @openapi
@@ -66,6 +67,7 @@ router.post('/categories', createCategory);
  *         description: Forbidden
  */
 router.post('/quizzes', createQuiz);
+router.get('/quizzes', getQuizzes);
 
 /**
  * @openapi
@@ -140,5 +142,8 @@ router.post('/quizzes/:quizId/questions', addQuestion);
  *         description: Forbidden
  */
 router.post('/create-admin', createAdmin);
+
+router.get('/users', getUsers);
+router.delete('/users/:userId', deleteUser);
 
 export default router;

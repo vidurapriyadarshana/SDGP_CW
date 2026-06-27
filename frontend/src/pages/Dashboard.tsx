@@ -1,5 +1,14 @@
 import React from 'react';
+import { useAuth } from '../context/AuthContext';
+import AdminDashboard from '../components/AdminDashboard';
+import StudentDashboard from '../components/StudentDashboard';
 
 export default function Dashboard() {
-  return <div className="p-8">Dashboard Page Skeleton</div>;
+  const { user } = useAuth();
+
+  if (user?.role === 'Admin') {
+    return <AdminDashboard />;
+  }
+
+  return <StudentDashboard />;
 }

@@ -1,6 +1,7 @@
 import Category from '../models/Category';
 import Quiz from '../models/Quiz';
 import Question from '../models/Question';
+import User from '../models/User';
 import { CustomError } from '../utils/CustomError';
 
 export const createCategory = async (name: string, description: string) => {
@@ -60,4 +61,25 @@ export const addQuestion = async (
   await question.save();
   
   return { questionId: question._id };
+};
+
+export const getCategories = async () => {
+  return await Category.find();
+};
+
+export const getQuizzes = async () => {
+  return await Quiz.find().populate('categoryId', 'name');
+};
+
+export const getUsers = async () => {
+  return await User.find().select('-passwordHash').sort({ createdAt: -1 });
+};
+
+export const deleteUser = async (userId: string) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new CustomError('User not found', 404);
+  }
+  await User.findByIdAndDelete(userId);
+  return { message: 'User deleted successfully' };
 };

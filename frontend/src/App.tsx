@@ -6,6 +6,7 @@ import AdminLogin from './pages/AdminLogin';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import CompleteRegistration from './pages/CompleteRegistration';
 import Dashboard from './pages/Dashboard';
 import QuizPlay from './pages/QuizPlay';
 import Results from './pages/Results';
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/complete-registration" element={<CompleteRegistration />} />
 
           {/* Secure Protected Routes */}
           <Route
