@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+    "seed:se": "ts-node-dev --transpile-only src/scripts/seedSE.ts",
     "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
