@@ -93,7 +93,7 @@ export default function App() {
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>
-      <Toaster richColors position="top-right" theme="dark" />
+      <Toaster richColors position="bottom-right" theme="dark" />
     </AuthProvider>
   );
 }
