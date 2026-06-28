@@ -482,14 +482,14 @@ export default function AdminDashboard() {
 
       <div className="flex-1 flex flex-col md:flex-row">
         {/* Navigation Sidebar */}
-        <nav className="w-full md:w-64 border-r border-slate-900 bg-slate-900/10 p-4 space-y-2 shrink-0">
-          <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">
+        <nav className="w-full md:w-64 border-b md:border-b-0 md:border-r border-slate-900 bg-slate-900/10 p-4 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible shrink-0 scrollbar-none">
+          <p className="hidden md:block text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-3 mb-3">
             Dashboard Panels
           </p>
 
           <button
             onClick={() => { setActiveTab('overview'); clearFeedback(); }}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0 md:w-full ${
               activeTab === 'overview' 
                 ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
                 : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
@@ -501,7 +501,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => { setActiveTab('category'); clearFeedback(); }}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0 md:w-full ${
               activeTab === 'category' 
                 ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
                 : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
@@ -513,7 +513,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => { setActiveTab('quiz'); clearFeedback(); }}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0 md:w-full ${
               activeTab === 'quiz' 
                 ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
                 : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
@@ -525,7 +525,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => { setActiveTab('question'); clearFeedback(); }}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0 md:w-full ${
               activeTab === 'question' 
                 ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
                 : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
@@ -538,7 +538,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => { setActiveTab('students'); clearFeedback(); }}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0 md:w-full ${
               activeTab === 'students' 
                 ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
                 : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
@@ -550,7 +550,7 @@ export default function AdminDashboard() {
 
           <button
             onClick={() => { setActiveTab('admins_list'); clearFeedback(); }}
-            className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0 md:w-full ${
               activeTab === 'admins_list' 
                 ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20' 
                 : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
@@ -611,7 +611,7 @@ export default function AdminDashboard() {
               {/* Show Quizzes List Table */}
               <div className="mt-8">
                 <h3 className="text-base font-bold text-white mb-4">Configured Quizzes</h3>
-                <div className="border border-slate-900 rounded-xl overflow-hidden bg-slate-900/20 backdrop-blur-md">
+                <div className="border border-slate-900 rounded-xl overflow-x-auto bg-slate-900/20 backdrop-blur-md">
                   {quizzes.length === 0 ? (
                     <div className="p-8 text-center text-slate-500 text-sm">
                       No quizzes configured yet. Navigate to the "Create Quiz Config" tab to add one.
@@ -696,7 +696,7 @@ export default function AdminDashboard() {
               {/* Existing Categories List */}
               <div className="mt-12">
                 <h3 className="text-base font-bold text-white mb-4">Existing Categories</h3>
-                <div className="border border-slate-900 rounded-xl overflow-hidden bg-slate-900/20 backdrop-blur-md">
+                <div className="border border-slate-900 rounded-xl overflow-x-auto bg-slate-900/20 backdrop-blur-md">
                   {categories.length === 0 ? (
                     <div className="p-8 text-center text-slate-500 text-sm">
                       No categories configured yet.
@@ -1002,7 +1002,7 @@ export default function AdminDashboard() {
               <h2 className="text-xl font-bold text-white mb-2">Manage Students</h2>
               <p className="text-sm text-slate-400 mb-6">List and delete registered student accounts.</p>
 
-              <div className="border border-slate-900 rounded-xl overflow-hidden bg-slate-900/20 backdrop-blur-md">
+              <div className="border border-slate-900 rounded-xl overflow-x-auto bg-slate-900/20 backdrop-blur-md">
                 {users.filter(u => u.role === 'Student').length === 0 ? (
                   <div className="p-8 text-center text-slate-500 text-sm">
                     No students registered yet.
@@ -1066,7 +1066,7 @@ export default function AdminDashboard() {
                 </Button>
               </div>
 
-              <div className="border border-slate-900 rounded-xl overflow-hidden bg-slate-900/20 backdrop-blur-md mt-6">
+              <div className="border border-slate-900 rounded-xl overflow-x-auto bg-slate-900/20 backdrop-blur-md mt-6">
                 {users.filter(u => u.role === 'Admin').length === 0 ? (
                   <div className="p-8 text-center text-slate-500 text-sm">
                     No administrators found.

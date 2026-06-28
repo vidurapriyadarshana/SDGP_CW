@@ -196,7 +196,7 @@ export default function Results() {
                 No leaderboard entries logged yet. Be the first to claim a rank!
               </div>
             ) : (
-              <div className="border border-slate-900 rounded-xl overflow-hidden bg-slate-950/20">
+              <div className="border border-slate-900 rounded-xl overflow-x-auto bg-slate-950/20">
                 <table className="w-full text-left border-collapse text-sm">
                   <thead>
                     <tr className="border-b border-slate-900 bg-slate-950/40 text-slate-400">
