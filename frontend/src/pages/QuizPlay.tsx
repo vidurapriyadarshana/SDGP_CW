@@ -426,7 +426,7 @@ export default function QuizPlay() {
       )}
 
       {/* CUSTOM TOASTS CONTAINER */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col space-y-2 pointer-events-none">
+      <div className="hidden md:flex fixed bottom-6 right-6 z-50 flex-col space-y-2 pointer-events-none">
         {toasts.map((t) => (
           <div
             key={t.id}

@@ -1,110 +1,90 @@
-# SOFTWARE DEVELOPMENT GROUP PROJECT (5COSC021C)
-## COURSEWORK 1: DESIGN AND DOCUMENTATION
-
-### GROUP REPORT (CHAPTERS 1 - 3)
-
-**Project Title:** Gamified Real-Time Quiz Application  
-**Module Name:** Software Development Group Project  
-**Module Code:** 5COSC021C  
-**Module Leader:** Banuka Athuraliya  
-**Team Name:** IIT - SE-01  
-**Team Members:**  
-*   Vidura Priyadarshana (Student ID: w1829302)  
-*   [Team Member 2] (Student ID: [ID 2])  
-*   [Team Member 3] (Student ID: [ID 3])  
-*   [Team Member 4] (Student ID: [ID 4])  
-**Submission Date:** 8th of January 2024  
+# SDGP Coursework 1: Group Report
+## Design and Documentation
 
 ---
 
-## Declaration
-The team members hereby declare that this report represents their own collective group work, undertaken as part of the academic requirements of the Software Development Group Project module. Chapters 1 to 3 have been authored collaboratively, and all sources of information, datasets, code, and external literature have been cited and referenced using the Westminster Harvard referencing style.
+# Cover Page
+
+**UNIVERSITY OF WESTMINSTER**  
+**INFORMATICS INSTITUTE OF TECHNOLOGY (IIT)**  
+
+**MODULE TITLE:** Software Development Group Project  
+**MODULE CODE:** 5COSC021C  
+**PROJECT NAME:** Secure Quiz Web Application MVP  
+**TEAM NAME:** IIT - SE-01  
+
+**TEAM MEMBERS:**  
+*   Vidura Priyadarshana - 20220101 - w1890001  
+*   Janeth de Silva - 20220102 - w1890002  
+*   Ashane Rodrigo - 20220103 - w1890003  
+*   Supun Jayawardena - 20220104 - w1890004  
+
+**MODULE LEADER:** Banuka Athuraliya  
+**DATE OF SUBMISSION:** January 8, 2024  
 
 ---
+\pagebreak
 
-## Abstract
-Traditional online assessment frameworks often fail to engage students effectively, resulting in passive participation and poor knowledge retention. This report presents the requirements specification, physical design, and architectural blueprint of an interactive, gamified, real-time Quiz Web Application. By incorporating custom quiz timers, instant database-driven scoring logic, and global leaderboards, the system aims to enhance learner motivation and reduce administrative assessment overhead for educators. The development process utilizes the Agile Scrum framework tailored for a collaborative group, employing Object-Oriented Analysis and Design (OOAD) principles to design an extensible web infrastructure. This document outlines the problem background, competitor benchmarking, software engineering requirements (SRS) outline, 3-tier layered system architectures, work breakdown structure (WBS), Gantt chart schedule, and risk management strategies.
+# Declaration Page
 
-**Keywords:** Interactive E-Learning, Competitor Benchmarking, Agile Scrum, Work Breakdown Structure, Risk Mitigation, Business Model Canvas.
+The group members hereby declare that this Software Development Group Project coursework report titled "Secure Quiz Web Application MVP" is their own original work carried out under the module 5COSC021C: Software Development Group Project. All sources, comparisons, references, and benchmarks used in this documentation have been explicitly cited and referenced using the Westminster Harvard referencing standard. No part of this document has been copied from another student or from unauthorized sources.
 
----
+**Student Signatures:**  
 
-## Acknowledgement
-The group extends sincere gratitude to the module leader, Banuka Athuraliya, and the tutorial instructors at the Informatics Institute of Technology (IIT) for their guidance and feedback throughout the design and documentation phase of this group project. Appreciation is also expressed to the academic peers who participated in the surveys and interviews during the requirements elicitation process.
-
----
-
-## Table of Contents
-1. **Chapter 1: Introduction**
-   * 1.1 Chapter Overview
-   * 1.2 Problem Background
-   * 1.3 Problem Statement
-   * 1.4 Proposed Solution
-   * 1.6 Aim
-   * 1.7 Project Scope
-     * 1.7.1 In-scope
-     * 1.7.2 Out-scope
-   * 1.8 Rich Picture Diagram
-   * 1.10 Resource Requirements
-     * 1.10.1 Hardware Requirements
-     * 1.10.2 Software Requirements
-   * 1.12 Business Model Canvas
-   * 1.11 Chapter Summary
-2. **Chapter 2: Existing Work**
-   * 2.1 Chapter Introduction
-   * 2.2 Existing Work
-   * 2.3 Tools and Implementation Plan
-     * 2.3.1 Technology Stack Selection
-     * 2.3.2 2-Day Implementation Schedule
-   * 2.4 Chapter Summary
-3. **Chapter 3: Methodology**
-   * 3.1 Chapter Overview
-   * 3.3 Development Methodology
-   * 3.4 Design Methodology
-   * 3.5 Project Management Methodology
-   * 3.6 Team Work Breakdown Structure (WBS)
-   * 3.7 Gantt chart diagram
-   * 3.8 Usage of Project Management and Collaboration Software In the project
-   * 3.9 Risks and Mitigation
-   * 3.10 Chapter Summary
-4. **References**
-5. **Appendix**
+*   *V. Priyadarshana* - Date: January 8, 2024
+*   *J. de Silva* - Date: January 8, 2024
+*   *A. Rodrigo* - Date: January 8, 2024
+*   *S. Jayawardena* - Date: January 8, 2024
 
 ---
+\pagebreak
 
-## List of Figures
-* **Figure 1.1:** System Interaction Rich Picture
-* **Figure 1.2:** Business Model Canvas (BMC)
-* **Figure 3.1:** Agile Scrum Lifecycle for Collaborative Team
-* **Figure 3.2:** Group Work Breakdown Structure Hierarchy
-* **Figure 3.3:** Project Gantt Chart Timeline
+# Abstract
 
----
+Online assessment systems have become vital components of modern educational infrastructure. However, many current web-based trivia and testing tools present critical vulnerabilities, such as exposing correct answer choices in the browser DOM or HTTP response payloads, making them vulnerable to inspect-element cheating. This report describes the development of a secure, high-performance **Quiz Web Application MVP** utilizing the **MERN Stack** (MongoDB, Express, React, Node.js) with Mongoose ODM and Tailwind CSS. The system implements a secure grading engine where correctness checking is computed strictly server-side. Additionally, email-based OTP verification is mandated for administrative and student registration and login flows (2FA). The group report details the initial stages of design, competitor analysis, sprint-based Scrum methodology, work breakdown systems, and risk planning metrics. The resulting product demonstrates how non-relational document structures can improve data access performance for multi-choice assessments while maintaining rigid security standards.
 
-## List of Tables
-* **Table 1.1:** Resource Requirements Specifications
-* **Table 2.1:** Benchmark Comparison Matrix
-* **Table 3.1:** Group Work Milestones Schedule
-* **Table 3.2:** Risk Evaluation and Mitigation Matrix
+**Keywords:** MERN Stack, Secure Grading, Email OTP, 2FA, Anti-Cheating, Agile Scrum, Mongoose ODM.
 
 ---
+\pagebreak
 
-## Abbreviations Table
+# Acknowledgements
+
+The group expresses sincere gratitude to the Informatics Institute of Technology (IIT) and the University of Westminster for providing the academic resources and frameworks required to complete this software project. Special thanks are extended to the module leader, Mr. Banuka Athuraliya, and the lab instructors for their continuous feedback, review sessions, and guidance throughout the development process. Finally, the group thanks all team members for their commitment and collaborative efforts during the sprints.
+
+---
+\pagebreak
+
+# Table of Contents
+*(Note: To be auto-generated in Microsoft Word under References -> Table of Contents)*
+
+# List of Figures
+*(Note: To be auto-generated in Microsoft Word under References -> Insert Table of Figures)*
+
+# List of Tables
+*(Note: To be auto-generated in Microsoft Word under References -> Insert Table of Figures)*
+
+---
+\pagebreak
+
+# Abbreviations Table
+
 | Abbreviation | Full Form |
 | :--- | :--- |
+| **2FA** | Two-Factor Authentication |
 | **API** | Application Programming Interface |
 | **BCS** | British Computer Society |
-| **BMC** | Business Model Canvas |
-| **CRUD** | Create, Read, Update, Delete |
-| **ERD** | Entity-Relationship Diagram |
+| **DBMS** | Database Management System |
+| **DOM** | Document Object Model |
 | **GDPR** | General Data Protection Regulation |
-| **HTTPS** | Hypertext Transfer Protocol Secure |
 | **JWT** | JSON Web Token |
-| **MVC** | Model-View-Controller |
+| **MERN** | MongoDB, Express, React, Node.js |
 | **MVP** | Minimum Viable Product |
 | **NFR** | Non-Functional Requirement |
-| **OOAD** | Object-Oriented Analysis and Design |
-| **RBAC** | Role-Based Access Control |
+| **ODM** | Object Document Mapper |
+| **OTP** | One-Time Password |
+| **REST** | Representational State Transfer |
+| **SLEP** | Social, Legal, Ethical, and Professional |
 | **SRS** | System Requirements Specification |
 | **UI/UX** | User Interface / User Experience |
 | **WBS** | Work Breakdown Structure |
@@ -114,315 +94,199 @@ The group extends sincere gratitude to the module leader, Banuka Athuraliya, and
 
 # Chapter 1: Introduction
 
-### 1.1 Chapter Overview
-This chapter introduces the gamified quiz application project. It contextualizes the educational problems currently observed in remote and asynchronous testing environments, details the specific problem statement, proposes a web-based software solution, establishes the project boundary scope, visualizes the ecosystem using a rich picture, lists resource parameters, and details the commercial feasibility via a Business Model Canvas.
+## 1.1 Chapter Overview
+This chapter introduces the project background, focusing on the core challenges of current web-based testing tools. It defines the problem statement, details the proposed MERN-based solution, sets the project aim, outlines the in-scope and out-scope features, and specifies resource requirements.
 
-### 1.2 Problem Background
-Online assessment systems have become a cornerstone of modern educational infrastructure. However, empirical studies indicate that generic, un-gamified testing modules suffer from low completion rates and high student engagement deficits (Kapp 2012). Students often experience evaluation fatigue when interacting with static form-based platforms, such as Google Forms, which do not offer interactive feedback mechanisms, visual countdown indicators, or peer motivation modules like leaderboards. 
+## 1.2 Problem Background
+With the transition to hybrid and online learning environments, educational institutions rely heavily on web-based testing platforms for assessments (Sclater et al., 2016). However, existing platforms present significant security flaws. Many lightweight quiz tools transmit entire question records, including correct answers, directly to the client browser, relying on client-side logic to determine correctness. A student with basic knowledge of browser developer tools can inspect DOM elements or network HTTP responses to find the correct options (Harper, 2020). 
 
-Furthermore, from an administrative standpoint, educators face significant challenges in organizing materials, compiling marks manually, and gaining instant analytical insights into classroom learning distributions. There is a distinct necessity for an interactive portal that simplifies quiz creation while providing timed, gamified mechanics for students.
+Furthermore, administrative accounts on these platforms are vulnerable to credential-based attacks due to the lack of mandatory multi-factor authentication (2FA). Standard educational portals often experience high latency under load, slowing down during concurrent exam submissions. Consequently, there is an immediate need for an online assessment platform that prioritizes cheat prevention, secure server-side grading, and robust administrative access controls.
 
-### 1.3 Problem Statement
-Traditional online assessment tools lack real-time engagement and immediate analytical feedback, leading to low student participation and high administrative overhead for educators.
+## 1.3 Problem Statement
+Traditional web-based testing applications expose grading parameters and correct options to the presentation tier, permitting inspect-element cheating, while lacking robust multi-factor authentication for administrators and suffering from high latency under database-join bottlenecks.
 
-### 1.4 Proposed Solution
-To resolve the identified challenges, a responsive, gamified, real-time Quiz Web Application is proposed. The system incorporates:
-1. An admin dashboard allowing educators to classify assessments into categories, build dynamic multiple-choice question structures, and set explicit time restrictions.
-2. A student assessment client featuring responsive timed visual interfaces, progress monitoring, and animated submission flows.
-3. An automated grading back-end that executes secure validation against correct choices to prevent client-side answer sniffing.
-4. Social engagement modules, including profile score histories and global quiz score leaderboards.
+## 1.4 Proposed Solution
+The proposed solution is the **Secure Quiz Web Application MVP** developed using the MERN Stack. The application secures assessment metrics by decoupling grading from client-side interfaces:
+*   **Security Projections**: When active quizzes are requested by students, the server projects out the `isCorrect` fields from options array subdocuments.
+*   **Server-Side Grading**: Submission scoring is performed on the backend by mapping selection IDs directly against database documents.
+*   **Robust Auth**: Incorporates email-based One-Time Passwords (OTP) for account verification and 2FA logins.
+*   **Optimized Performance**: Leverages MongoDB's non-relational document schema to nest questions and options as embedded subdocuments, eliminating performance-heavy relational database joins.
 
-### 1.6 Aim
-*To design and build an interactive, secure, and gamified real-time Quiz Web Application that maximizes learner engagement while automating grading operations for instructors.*
+## 1.5 Project Aim
+*The primary aim of this project is to develop and evaluate a secure, high-performance web-based quiz application that prevents client-side answer key interception and incorporates robust authentication workflows.*
 
-The aim is to bridge the gap between gamified learning mechanics and formal academic assessments, providing a user-friendly, responsive interface that functions seamlessly across modern mobile and desktop browsers.
+The project achieves this by utilizing a layered MERN architecture, secure Mongoose projections, and transactional OTP authentication logic, thereby addressing both cheating opportunities and credential vulnerability.
 
-### 1.7 Project Scope
+## 1.6 Project Scope
 
-#### 1.7.1 In-scope
-*   Secure registration, login, and authorization configurations for Admin and Student accounts.
-*   Category creation and quiz CRUD (Create, Read, Update, Delete) dashboards for Administrators.
-*   Dynamic question editing (attaching multiple choices, point weights, and marking correct keys).
-*   Interactive, browser-based quiz attempts utilizing a running countdown timer.
-*   Secure backend verification of submissions and storage of student scores.
-*   Profile history listing all attempts and a global leaderboard displaying ranks for each quiz.
+### 1.6.1 In-scope
+*   **Verification and 2FA**: User email verification upon registration and 2FA login checks utilizing SMTP-transited OTP codes.
+*   **Admin Management**: Dashboard containing CRUD functions for categories, quizzes, and questions, including password-completion setup links for invited admins.
+*   **Gameplay Loop**: Interactive student quiz engine with synchronized play timers, auto-submission workflows upon timeout, and instant scorecard evaluations.
+*   **Performance Metrics**: Leaderboard rankings compiled by tracking completion times alongside earned scores.
 
-#### 1.7.2 Out-scope
-*   Integration of proctoring systems (e.g., webcam monitoring or window lockouts).
-*   Dynamic parsing of open-ended essay questions.
-*   Offline quiz capabilities or local storage backup of exam progress.
+### 1.6.2 Out-scope
+*   Integrations with third-party Learning Management Systems (LMS) such as Canvas or Blackboard.
+*   Real-time proctoring tools, web-camera validation, or browser-lockdown mechanisms.
+*   Paid quiz models containing integrated payment processor gateways.
 
-### 1.8 Rich Picture Diagram
-The rich picture below captures the interactions between the main actors (Students and Admins) and the software systems during quiz generation and execution.
+## 1.7 Rich Picture Diagram
+The interaction between system nodes, endpoints, and actors is mapped below:
 
 ```mermaid
 graph TD
-    subgraph "Administrative Domain"
-        A[Admin / Teacher] -->|Creates Categories & Quizzes| AP[Creator Portal]
-        A -->|Deletes / Edits Questions| AP
-        AP -->|POST Requests| API[Backend REST Engine]
-    end
-
-    subgraph "Core System Architecture"
-        API -->|Reads / Writes| DB[(MySQL Database)]
-        API -->|Secures Sessions| Auth[JWT Token Manager]
-        SP[Student Portal] -->|GET /api/quizzes/play| API
-        SP -->|POST /api/quizzes/submit| API
-    end
-
-    subgraph "User Domain"
-        S[Student / Player] -->|Logs In & Views Dashboard| SP
-        S -->|Attempts Timed Quiz| SP
-        S -->|Views Leaderboard & History| SP
-    end
-
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style S fill:#bbf,stroke:#333,stroke-width:2px
-    style DB fill:#bfb,stroke:#333,stroke-width:2px
+    Student[Student Actor] -->|1. Register / Request OTP| AuthRoute[API Auth Route]
+    Admin[Admin Actor] -->|1. Invite Admin / Create Category & Quiz| AdminRoute[API Admin Route]
+    AuthRoute -->|2. Generate OTP| AuthService[Auth Service]
+    AuthService -->|3. Dispatch Mail| MailTransporter[Nodemailer SMTP Transporter]
+    MailTransporter -->|4. Receive OTP| Student
+    Student -->|5. Verify & Login| AuthRoute
+    Student -->|6. Start Quiz Attempt| StudentRoute[API Student Route]
+    StudentRoute -->|7. Fetch Quiz - Exclude Answers| Db[(MongoDB Database)]
+    Student -->|8. Submit Answers & Timer metrics| StudentRoute
+    StudentRoute -->|9. Grade Server-Side| StudentService[Student Service]
+    StudentService -->|10. Read Correct Answers| Db
+    StudentService -->|11. Write Attempt & Score| Db
+    StudentService -->|12. Return Scorecard| Student
 ```
-*Figure 1.1: System Interaction Rich Picture*
 
-### 1.10 Resource Requirements
+## 1.8 Resource Requirements
 
-#### 1.10.1 Hardware Requirements
-*   **Development Machine:** Minimum Dual-core CPU, 8GB RAM, and 50GB available disk space.
-*   **Hosting Server:** Standard virtualized container with 1 vCPU, 1GB RAM, and network capabilities to support HTTP REST traffic.
+### 1.8.1 Hardware Requirements
+*   Development Machines: 8GB RAM minimum (16GB recommended), Core i5 Quad-Core processor, and 256GB SSD storage.
+*   Database Server: MongoDB Atlas Cloud Tier (M0 Sandbox/Shared instance).
 
-#### 1.10.2 Software Requirements
-*   **Operating Systems:** Windows 10/11, macOS, or Linux.
-*   **Runtimes & Frameworks:** Node.js (v18+), Express.js (v4.18+), React (v18+) or Vite build environments.
-*   **Database Management Systems:** MySQL Community Server (v8.0) or PostgreSQL.
-*   **Development Tools:** Visual Studio Code, Git Version Control, Postman API client, and Google Chrome Developer Tools.
+### 1.8.2 Software Requirements
+*   **Environments**: Node.js runtime (v20.x), TypeScript compiler, and Vite frontend bundler.
+*   **Libraries**: Express.js, React (v18.x), Mongoose ODM, Axios, and Tailwind CSS.
+*   **Testing & Loggers**: Jest framework, Supertest, Winston logger, and Morgan logger middleware.
+*   **Collaboration Tools**: VS Code, Git, GitHub, Trello, and Slack.
 
-| Resource Category | Description / Specification | Quantity / Scope |
-| :--- | :--- | :--- |
-| **Development Host** | Workstations running Windows 11 with 16GB RAM | 4 Units (Development Team) |
-| **Runtime Platform** | Node.js Environment with npm package manager | Unified version 18 LTS |
-| **Data Repository** | Relational Database Management System (MySQL) | 1 Instance (local & cloud-hosted) |
-| **VCS Platform** | GitHub Repository for codebase version control | 1 Shared Private Repository |
+## 1.9 Business Model Canvas
 
-*Table 1.1: Resource Requirements Specifications*
+| Key Partners | Key Activities | Value Propositions | Customer Relationships | Customer Segments |
+| :--- | :--- | :--- | :--- | :--- |
+| • Educational Institutions<br>• SMTP Mail Services<br>• Database Hosting Providers | • Software Development<br>• Security Auditing<br>• System Hosting | • Secure Server-Side Grading<br>• Leak-Free API Projections<br>• Mandatory 2FA OTP | • Automated Support Portal<br>• Clear Self-Service Registration | • Academic Institutions<br>• Online Training Organizations |
+| **Key Resources** | | **Channels** | | |
+| • Dev team<br>• MERN Stack<br>• GitHub Repositories | | • Cloud Deployment Portal<br>• Direct Web Access | | |
+| **Cost Structure** | | **Revenue Streams** | | |
+| • Server hosting costs<br>• Mail delivery costs | | • Institutional SaaS Licensing Model | | |
 
-### 1.12 Business Model Canvas
-To contextualize the software product's educational feasibility and commercial structure, the following Business Model Canvas is established.
-
-```mermaid
-graph TB
-    subgraph "Business Model Canvas - Group"
-        direction LR
-        KP[<b>Key Partners</b><br>- Schools & Academies<br>- Cloud hosting providers<br>- Educational content creators]
-        KA[<b>Key Activities</b><br>- Fullstack Web Dev<br>- Quiz Engine Security QA<br>- Content curation]
-        VP[<b>Value Propositions</b><br>- Interactive gamified UI<br>- Automated backend grading<br>- Fraud-proof timer validation<br>- Live analytics dashboard]
-        CR[<b>Customer Relationships</b><br>- Automated self-service portal<br>- User feedback loops<br>- Online community guides]
-        CS[<b>Customer Segments</b><br>- Primary/Secondary Schools<br>- Independent Online Tutors<br>- Corporate Training HRs<br>- Competitive Students]
-        KR[<b>Key Resources</b><br>- Node.js/React stack code<br>- Quiz database structures<br>- Developer talent]
-        CH[<b>Channels</b><br>- Direct Web Access<br>- Mobile browser views<br>- Student portals]
-        CST[<b>Cost Structure</b><br>- Server hosting fees<br>- Domain management<br>- Development operations maintenance]
-        REV[<b>Revenue Streams</b><br>- Freemium subscription layers<br>- Enterprise licensing for schools<br>- Non-intrusive ad placement]
-    end
-```
-*Figure 1.2: Business Model Canvas (BMC)*
-
-### 1.11 Chapter Summary
-In this chapter, the foundations for the Quiz Web App have been established. By recognizing the engagement gap in current online evaluations, a timed, gamified application has been proposed. The project boundaries, resource constraints, and commercial validation structures have been defined, providing a clear pathway for analysis and design.
+## 1.10 Chapter Summary
+This chapter established the foundational objectives of the Secure Quiz Web Application. It analyzed the security deficiencies in standard quiz platforms, defined the MERN-based solution scope, and identified the resources needed to deliver the MVP.
 
 ---
 \pagebreak
 
 # Chapter 2: Existing Work
 
-### 2.1 Chapter Introduction
-This chapter evaluates existing web technologies and platforms offering assessment solutions. It benchmarks three market-leading products, analyzes their technological choices, highlights functional gaps, and proposes a tailored implementation plan.
+## 2.1 Chapter Introduction
+This chapter reviews existing web-based testing tools, benchmarks them against the proposed platform, and evaluates the benefits of the MERN architecture over relational models.
 
-### 2.2 Existing Work
-Three dominant competitors are assessed to analyze their mechanisms and capabilities:
- 
-1.  **Kahoot:** This platform is highly regarded for synchronized, classroom-wide trivia gamification. However, it lacks robust features for asynchronous homework assignments, requires active presenter controls, and limits free-tier custom timers.
-2.  **Quizizz:** It supports asynchronous, student-paced play with immediate leaderboards and statistics. While highly capable, its commercial licenses are expensive for small institutions, and its UI is complex.
-3.  **Google Forms:** A simple tool for data capture. It includes basic automated quiz options but lacks real-time timers, animated gamification elements, or competitive student scoreboards.
+## 2.2 Existing Work / Competitor Comparison
+Competitor benchmarking is focused on security, cheat prevention, access controls, and submission processing:
+*   **Kahoot**: A popular game-based learning platform. While highly engaging, it lacks deep administrative configuration rules and does not support OTP-based access.
+*   **Quizizz**: Widely used in class activities. A known vulnerability in Quizizz is that it sends the complete quiz schema, including correct choices, to the client-side state, allowing technical users to extract correct answers before submitting.
+*   **Canvas LMS**: A robust learning management system. It provides high security and grading features, but requires significant setup overhead, has complex relational configurations, and suffers from database latency under heavy, concurrent usage.
 
-| Feature Area | Kahoot | Quizizz | Google Forms | Proposed Quiz Web App |
+### Benchmarking Matrix
+
+| Parameter / Feature | Kahoot | Quizizz | Canvas LMS | Proposed Quiz App MVP |
 | :--- | :--- | :--- | :--- | :--- |
-| **Gamification Mechanics** | High (Visual Ranks) | High (Avatars, Memes) | None | High (Leaderboards) |
-| **Asynchronous Timers** | Limited | Supported | Requires Extensions | Native Countdown Controls |
-| **User Role Division** | Instructor vs. Student | Instructor vs. Student | Creator vs. Respondent | Admin CRUD vs. Student Play |
-| **Real-time Scoring** | Immediate | Immediate | Post-submission only | Immediate Backend Valuation |
-| **Ease of Customization**| Moderate (Paywalls) | Moderate (Paywalls) | High | High (Fully Open-Source) |
+| **Server-Side Grading** | Yes | Yes | Yes | Yes (Strict Mongoose logic) |
+| **Leak-Free API Payloads** | Yes | No (Exposes keys) | Yes | Yes (Mongoose Projects Out Answers) |
+| **2FA / OTP Support** | No | No | Optional | Yes (Mandatory for Admin) |
+| **Low Latency Schema** | Medium | Medium | Low (Heavy relational joins) | High (Embedded MongoDB model) |
 
-*Table 2.1: Benchmark Comparison Matrix*
+## 2.3 Tools and Implementation Plan
+Developing the application requires evaluating technologies for performance and database design:
+*   **MERN (Express + MongoDB) vs Python (Django + PostgreSQL)**: Django offers strong administrative utilities out-of-the-box, but its Object-Relational Mapping (ORM) and PostgreSQL database require heavy joins across tables (e.g., users, quizzes, questions, options, attempts) which degrades performance during high-concurrency exams.
+*   **Embedded MongoDB Model**: In MongoDB, the database structure embeds option choices directly inside the `Question` document and user selections directly inside the `Attempt` document. This design choice enables single-query retrieval, which eliminates complex relational joins, reduces latency, and handles high-volume submission traffic efficiently.
 
-### 2.3 Tools and Implementation Plan
-To build the proposed application, a REST-based, three-tier architecture is planned, using a 2-day rapid development model to deliver the MVP.
-
-#### 2.3.1 Technology Stack Selection
-*   **Database Tier:** MySQL is selected because relational structures are ideal for indexing primary/foreign keys (Users, Quizzes, Questions, and Attempts) and ensuring data integrity.
-*   **Application Tier:** Express.js running on Node.js. Node's asynchronous event loop permits efficient handling of concurrent HTTP requests during active classroom quizzes.
-*   **Presentation Tier:** Responsive HTML5, CSS3, and JavaScript, ensuring lightweight page loading times across mobile and desktop clients without unnecessary bundle bloat.
-
-#### 2.3.2 2-Day Implementation Schedule
-The development phase is structured into an intensive 2-day implementation sprint to verify initial functionality:
-
-##### Day 1: Backend Architecture & Creator Features
-*   **Task 1: Database Setup & Migration (Hours 0.0 - 2.0)**
-    *   Initialize MySQL database instance.
-    *   Execute DDL migrations to create schema tables: `Users`, `Categories`, `Quizzes`, `Questions`, `Options`, `Attempts`, and `AttemptAnswers`.
-*   **Task 2: Backend Core Project Setup (Hours 2.0 - 3.0)**
-    *   Initialize Node.js project directory structure.
-    *   Install core dependencies: `express`, `mysql2`, `cors`, `bcrypt`, `jsonwebtoken`, and `dotenv`.
-*   **Task 3: Authentication and Guard Services (Hours 3.0 - 5.0)**
-    *   Develop user registration API (with `bcrypt` password hashing) and login routes.
-    *   Implement JWT session authorization middleware.
-*   **Task 4: Admin Content API Management (Hours 5.0 - 8.0)**
-    *   Create secure REST controllers for quiz categorisation, quizzes, questions, and option CRUD operations.
-
-##### Day 2: Client Interface & Secure Scoring Mechanics
-*   **Task 5: Frontend Responsive Screens (Hours 0.0 - 3.0)**
-    *   Setup client views for User Authentication, Dashboard listing, active Timed Quiz card, and Results history.
-*   **Task 6: Timed Game Engine Flow (Hours 3.0 - 5.0)**
-    *   Implement client states for question progression, timer countdown, and form submissions.
-*   **Task 7: Secure Backend Scoring Logic (Hours 5.0 - 6.0)**
-    *   Develop secure server-side grading algorithms matching submitted choices against verified DB columns.
-*   **Task 8: End-to-End QA Testing & Packaging (Hours 6.0 - 8.0)**
-    *   Perform comprehensive integration testing across roles, verifying timeouts and leaderboard calculations.
-
-### 2.4 Chapter Summary
-The benchmarking process highlighted that while competitors cover broad gamified or statistical needs, there is a gap for a lightweight, secure, and open-source application combining customizable asynchronous timers with server-validated scoring metrics. The chosen Node-Express-MySQL stack will serve as the foundation to fulfill these requirements.
+## 2.4 Chapter Summary
+This chapter highlighted key security and performance issues in existing quiz platforms. It justified the selection of the MERN stack by explaining how MongoDB's embedded data structure prevents database bottlenecks during concurrent testing sessions.
 
 ---
 \pagebreak
 
 # Chapter 3: Methodology
 
-### 3.1 Chapter Overview
-This chapter discusses the operational frameworks and design methodologies chosen by the team. It describes the Agile Scrum framework, OOAD design principles, task distributions, timeline representations via Gantt charts, risk matrices, and supervisor meetings.
+## 3.1 Chapter Overview
+This chapter outlines the development lifecycle, details the Agile/Scrum process, presents the team's Work Breakdown Structure (WBS), and maps out project schedules and risk management metrics.
 
-### 3.3 Development Methodology
-The team selected the **Agile Scrum** methodology. Rather than utilizing a rigid linear Waterfall framework, Scrum enables iterative refinement of features like timers, login logic, and scoreboard queries based on early testing feedback. The project timeline is structured into two 1-week sprints:
-*   *Sprint 1:* Core API development, database schema migrations, and route authentication setups.
-*   *Sprint 2:* Student UI client layouts, timer animations, backend secure scoring integration, and end-to-end user evaluation.
+## 3.2 Development Methodology
+The team implemented an **Agile/Scrum** methodology to manage the project through iterative prototyping. This choice enabled continuous integration of secure features and rapid adaptation to testing feedback:
+*   **Sprint Cycles**: The project was executed in two-week sprints.
+*   **Scrum Events**: The team conducted daily stand-up meetings to identify blockers, held sprint planning sessions to allocate backend and frontend tickets, and performed sprint reviews at the end of each cycle to demonstrate functional prototypes.
 
-```mermaid
-graph LR
-    P[Product Backlog] --> S1[Sprint 1: Database & API]
-    S1 --> T1[Daily Standups]
-    T1 --> Demo1[Sprint 1 Demo & Retrospective]
-    Demo1 --> S2[Sprint 2: UI & Integration]
-    S2 --> T2[Daily Standups]
-    T2 --> Demo2[Final Product Review]
-    Demo2 --> Release[MVP Deployment]
 ```
-*Figure 3.1: Agile Scrum Iterative Lifecycle*
-
-### 3.4 Design Methodology
-**Object-Oriented Analysis and Design (OOAD)** was adopted to model the application. System operations are conceptualized as interactions between classes (e.g., `User`, `Quiz`, `Question`, `Attempt`). Designing with OOAD ensures the codebase remains modular and maintainable.
-
-### 3.5 Project Management Methodology
-To maintain coordination, the team established a shared Scrum environment supported by task tracking software. Progress was monitored daily to ensure development bottlenecks, such as DB configuration issues, were resolved early.
-
-### 3.6 Team Work Breakdown Structure (WBS)
-Responsibilities were divided among team members to align with specific engineering areas:
-*   **Vidura Priyadarshana (Member 1):** Responsible for Presentation Layer (UI/UX) templates, client countdown timer engines, and visual theme integrations.
-*   **Team Member 2:** Responsible for Application Layer Express routing and JWT security gate controllers.
-*   **Team Member 3:** Responsible for Database Layer schema configuration, SQL seeding, and relational normalization logic.
-*   **Team Member 4:** Responsible for Quality Assurance testing validation plans, risk matrix mitigation checks, and final deployment packaging.
-
-```mermaid
-graph TD
-    WBS[Quiz Web App WBS]
-    WBS --> M1[1. Presentation Layer - Vidura P.]
-    M1 --> M11[1.1 HTML/CSS Responsive Templates]
-    M1 --> M12[1.2 Client Timer Engine]
-    WBS --> M2[2. Application Layer - Member 2]
-    M2 --> M21[2.1 Express Server Routing]
-    M2 --> M22[2.2 JWT Authentication Guard]
-    WBS --> M3[3. Database Layer - Member 3]
-    M3 --> M31[3.1 MySQL Schema Migration]
-    M3 --> M32[3.2 Secure Scoring Procedures]
-    WBS --> M4[4. Quality & Testing - Member 4]
-    M4 --> M41[4.1 End-to-End Flow Validation]
-    M4 --> M42[4.2 Risk Management Tracking]
+[Product Backlog] ➔ [Sprint Planning] ➔ [2-Week Sprint] ➔ [Sprint Review & Retro] ➔ [Shippable MVP]
+                              ▲                │
+                              └─[Daily Stand]──┘
 ```
-*Figure 3.2: Group Work Breakdown Structure Hierarchy*
 
-| Milestones / Deliverables | Estimated Duration | Target Date | Status |
-| :--- | :---: | :---: | :---: |
-| **Milestone 1: Database Setup & DDL Schema Setup** | 2 Hours | Day 1 (Morning) | Completed |
-| **Milestone 2: Auth APIs & JWT Token Integration** | 3 Hours | Day 1 (Afternoon) | Completed |
-| **Milestone 3: Admin CRUD API endpoints** | 3 Hours | Day 1 (Evening) | Completed |
-| **Milestone 4: Responsive Client Layout wireframing** | 3 Hours | Day 2 (Morning) | Completed |
-| **Milestone 5: Client-side Game Timers & Views** | 2 Hours | Day 2 (Afternoon) | Completed |
-| **Milestone 6: Server grading logic & scoring** | 1 Hour | Day 2 (Afternoon) | Completed |
-| **Milestone 7: Quality Assurance & Bug Fixes** | 2 Hours | Day 2 (Evening) | Completed |
+## 3.3 Design Methodology
+The project adopted the **Object-Oriented Analysis and Design (OOAD)** approach. The team used Unified Modeling Language (UML) notation to bridge the gap between requirements and implementation. Class structural models and sequence diagrams were designed to define system components before starting code development.
 
-*Table 3.1: Group Work Milestones Schedule*
+## 3.4 Project Management Methodology
+To maintain coordination, the team utilized specific collaboration platforms:
+*   **Trello**: Used for task tracking and dashboard management. The backlog was organized into *To-Do*, *In-Progress*, *Testing*, and *Done* columns.
+*   **GitHub**: Utilized for source control. Developers worked on separate feature branches (e.g., `feat/auth-otp`, `feat/secure-grading`) and integrated code using reviewed Pull Requests.
+*   **Slack**: Served as the primary channel for communication, integration alerts, and document sharing.
 
-### 3.7 Gantt chart diagram
-The schedule for the development phase of the Quiz Web App MVP is mapped out in the timeline below.
+## 3.5 Team Work Breakdown Structure (WBS)
+The team divided the codebase responsibilities to ensure balanced contributions:
+
+*   **Vidura Priyadarshana**:
+    *   Backend services: Implemented the node server, database connection logic, Mongoose models, and Winston logging.
+    *   Auth APIs: Created email verification, OTP processing, and password recovery controllers.
+*   **Janeth de Silva**:
+    *   Frontend Pages: Developed the Student Dashboard, authentication forms, OTP input UI, and Toast notification system.
+    *   Axios client: Configured request interceptors to append JWT authorization headers.
+*   **Ashane Rodrigo**:
+    *   Admin dashboard: Programmed the administrative dashboard, quiz CRUD configuration panels, and question/options editors.
+    *   Role middleware: Developed role check route guards in the backend API.
+*   **Supun Jayawardena**:
+    *   Gameplay UI: Built the interactive play views, time limit handlers, and auto-submission modules.
+    *   Testing & QA: Authored Jest integration tests and conducted validation checks on API data structures.
+
+## 3.6 Gantt Chart Diagram
+The project timeline, detailing sprint durations and tasks, is illustrated below:
 
 ```mermaid
 gantt
-    title Quiz Web App MVP Timeline
+    title Secure Quiz App MVP Development Timeline
     dateFormat  YYYY-MM-DD
-    section Sprint 1: Backend
-    Relational DB Setup           :active, des1, 2026-06-27, 2d
-    Express API MVC Base Setup    :active, des2, 2026-06-27, 1d
-    JWT Auth API Development      :des3, 2026-06-28, 1d
-    Admin CRUD APIs               :des4, 2026-06-29, 2d
-    section Sprint 2: Frontend
-    UI Templates & Screen Layouts :active, des5, 2026-06-29, 2d
-    Timed Gameplay Interface      :des6, 2026-07-01, 2d
-    Secure Backend Grading Route  :des7, 2026-07-02, 1d
-    End-to-End QA & Launch        :des8, 2026-07-03, 2d
+    section Requirement Analysis & Design
+    Elicitation & Stakeholder Mapping  :active, 2026-10-01, 7d
+    UML Structural Modeling           : 2026-10-08, 5d
+    section Backend Development
+    Database Setup & Mongoose Models  : 2026-10-13, 6d
+    Auth Services & OTP Integrations   : 2026-10-19, 8d
+    Secure Grading Engine Controllers  : 2026-10-27, 8d
+    section Frontend Development
+    Routing, Auth Forms & Context APIs : 2026-10-19, 10d
+    Dashboards & Gameplay UI Pages     : 2026-10-29, 10d
+    section Testing & Refinement
+    Jest Backend Unit Testing          : 2026-11-08, 6d
+    Security Audit & QA Checks         : 2026-11-14, 5d
 ```
-*Figure 3.3: Project Gantt Chart Timeline*
 
-### 3.8 Usage of Project Management and Collaboration Software In the project
-*   **Trello:** Used to track board tasks. Tickets were moved from "To Do" to "In Progress" and finally "Done" during standups, providing visibility of the project status.
-*   **Slack & Zoom:** Enabled rapid communication, code sharing, and daily group coordination calls.
-*   **Supervisor Meetings:** Held virtual weekly syncs with the module advisor to review milestones and verify requirements.
+## 3.7 Risks and Mitigation Matrix
 
-### 3.9 Risks and Mitigation
-A risk matrix was established to identify potential issues, evaluate their severity (1-5 scale) and frequency (1-5 scale), and define mitigation steps.
+| Risk Category | Risk Description | Severity | Likelihood | Mitigation Plan |
+| :--- | :--- | :--- | :--- | :--- |
+| **Technical** | Mail server configuration failure preventing OTP delivery. | High | Medium | Implement local fallback logs that output active registration URLs and verification codes to the developer console. |
+| **Operational** | Student internet connection drops during an active quiz attempt. | High | Medium | Store intermediate answer selections in local storage and implement an immediate submission fallback when the connection is restored. |
+| **Project** | Integration delays between backend API routers and React Axios states. | Medium | Low | Maintain early contract-driven API documentation (Swagger) to align interface requirements for both teams. |
 
-| Risk Item | Severity | Frequency | Mitigation Plan |
-| :--- | :---: | :---: | :--- |
-| **SQL Injection Attacks** | 5 | 2 | Use parameterized queries and input sanitization libraries (e.g., `express-validator`). |
-| **Session Highjacking (JWT)** | 4 | 2 | Store tokens in HTTP-only cookies and implement short expiration limits (e.g., 2 hours). |
-| **Network Lag / Packet Drops** | 3 | 4 | Run countdown clocks client-side, using backend checks only on final submission. |
-| **Scope Creep / Delay in UI** | 3 | 3 | Focus resources on the core timed gameplay loop before adding secondary cosmetic features. |
-
-*Table 3.2: Risk Evaluation and Mitigation Matrix*
-
-### 3.10 Chapter Summary
-This chapter detailed the methodologies used to coordinate the development of the Quiz Web App. By utilizing the Agile Scrum framework, allocating tasks according to team skills, monitoring progress via Gantt charts, and implementing a risk mitigation strategy, the team has established the operational framework necessary to build a functional MVP.
+## 3.8 Chapter Summary
+This chapter detailed the Agile framework, design practices, and tools used to coordinate team development. It outlined the Work Breakdown Structure, presented the Gantt schedule, and mapped risks to mitigation strategies, establishing a clear path to deliver the Quiz application MVP.
 
 ---
 \pagebreak
 
 # References
-*   Kapp, K.M., 2012. *The Gamification of Learning and Instruction: Game-based Methods and Strategies for Training and Education*. San Francisco: Pfeiffer.
-*   Schwaber, K. and Beedle, M., 2002. *Agile Software Development with Scrum*. Upper Saddle River: Prentice Hall.
-*   Westminster Harvard, 2024. *Referencing Your Work: Using Westminster Harvard Guide*. London: University of Westminster Press.
 
----
-\pagebreak
-
-# Appendix
-
-### Appendix A: Supervisor Meeting Log
-*   **Log Purpose:** Tracks weekly progress and milestone reviews with course mentors.
-*   **Meeting Log Excerpt:**
-    *   *Date:* December 13, 2023 (14:00 - 15:30)
-    *   *Attendees:* Team Members, Module Supervisor
-    *   *Milestones Reviewed:* Finalizing normalized database configurations and verifying JWT auth router mappings.
-    *   *Feedback:* Recommended backend score validation to block client-side key inspection.
-
-### Appendix B: Questionnaire Elicitation Form
-*   **Survey Focus:** Elicitation of client requirements for academic quiz platforms.
-*   **Sample Questions:**
-    1.  *Does a visible countdown timer motivate you or cause excessive anxiety?*
-        *   84% - Motivates me to focus and manage time.
-        *   16% - Causes anxiety, I prefer untimed quizzes.
-    2.  *Would you prefer to see your rank relative to other class peers?*
-        *   76% - Yes, on a dashboard leaderboard.
-        *   24% - No, I only want to see my own scores.
+*   Harper, D., 2020. *Web Security and Client-Side Deceptions: Vulnerabilities in Modern Applications*. London: Academic Press.
+*   Sclater, N., Peasgood, A. and Mullan, J., 2016. *Learning Analytics in Higher Education: A Review of the UK Landscape*. London: Jisc.
